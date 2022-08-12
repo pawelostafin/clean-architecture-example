@@ -1,5 +1,6 @@
 package com.example.cleanarchitectureexample.di
 
+import com.example.cleanarchitectureexample.ui.login.LoginViewModel
 import com.example.cleanarchitectureexample.ui.main.MainViewModel
 import com.example.cleanarchitectureexample.ui.test.TestViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -13,6 +14,12 @@ val viewModelModule = module {
 
     viewModel {
         MainViewModel()
+    }
+
+    viewModel {
+        LoginViewModel(
+            loginUseCase = get()
+        )
     }
 
 }

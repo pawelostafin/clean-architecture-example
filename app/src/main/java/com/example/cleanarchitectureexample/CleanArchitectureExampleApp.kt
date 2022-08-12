@@ -3,6 +3,8 @@ package com.example.cleanarchitectureexample
 import android.app.Application
 import com.example.cleanarchitectureexample.di.appModule
 import com.example.cleanarchitectureexample.di.viewModelModule
+import com.example.data.di.dataModules
+import com.example.domain.di.domainModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -23,6 +25,8 @@ class CleanArchitectureExampleApp : Application() {
             androidContext(this@CleanArchitectureExampleApp)
             modules(appModule)
             modules(viewModelModule)
+            modules(dataModules)
+            modules(domainModules)
         }
     }
 

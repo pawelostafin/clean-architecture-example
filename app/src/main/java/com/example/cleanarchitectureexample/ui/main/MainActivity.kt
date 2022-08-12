@@ -24,7 +24,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(ActivityMa
         val navHostFragment = binding.navHostContainer.getFragment() as NavHostFragment
         navHostFragment.navController.apply {
             val graph = navInflater.inflate(R.navigation.main_graph).apply {
-                setStartDestination(R.id.testFragment)
+                setStartDestination(R.id.loginFragment)
             }
             setGraph(graph, null)
         }

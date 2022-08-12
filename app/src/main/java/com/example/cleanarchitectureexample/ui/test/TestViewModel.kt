@@ -17,7 +17,6 @@ class TestViewModel : BaseViewModel() {
     private val _backgroundColor = MutableStateFlow(RgbColor.random())
     val backgroundColor = _backgroundColor.asStateFlow()
 
-
     override fun initialize() {
         super.initialize()
     }

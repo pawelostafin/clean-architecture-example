@@ -62,6 +62,7 @@ kapt {
 dependencies {
     implementation(fileTree(mapOf("dir" to "Versions", "include" to listOf("*.jar"))))
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     coreLibraryDesugaring(Libs.desugar)
 
