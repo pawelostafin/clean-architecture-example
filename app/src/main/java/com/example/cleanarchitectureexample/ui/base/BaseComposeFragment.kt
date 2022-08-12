@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -20,9 +23,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.cleanarchitectureexample.R
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
 
@@ -59,7 +64,7 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
                 }
             }
         }
-        observeViewModel()
+        initObservers()
         viewModel.initializeIfNeeded()
     }
 
@@ -67,7 +72,7 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
     abstract fun ContentView()
 
     @CallSuper
-    protected open fun observeViewModel() {
+    protected open fun initObservers() {
 
     }
 

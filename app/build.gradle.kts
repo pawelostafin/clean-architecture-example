@@ -80,6 +80,9 @@ dependencies {
 
     implementation(Libs.timber)
 
+    implementation(Libs.navigationFragmentKtx)
+    implementation(Libs.navigationUiKtx)
+
     implementation(Libs.koin)
 
     testImplementation(Libs.Test.koinTest)

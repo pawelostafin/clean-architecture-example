@@ -20,6 +20,9 @@ object Libs {
 
     const val koin = "io.insert-koin:koin-android:" + Versions.koin
 
+    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:" + Versions.navigation
+    const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:" + Versions.navigation
+
     object Test {
         const val mockk = "io.mockk:mockk:" + Versions.mockk
         const val mockkAgentJvm = "io.mockk:mockk-agent-jvm:" + Versions.mockk
