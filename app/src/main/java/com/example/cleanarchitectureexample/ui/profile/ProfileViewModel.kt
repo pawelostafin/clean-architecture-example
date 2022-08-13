@@ -40,6 +40,10 @@ class ProfileViewModel(
         }
     }
 
+    fun closeButtonClicked() {
+        _navigation.trySend(Navigation.Back)
+    }
+
     sealed class Navigation {
         object Back : Navigation()
         object Login : Navigation()

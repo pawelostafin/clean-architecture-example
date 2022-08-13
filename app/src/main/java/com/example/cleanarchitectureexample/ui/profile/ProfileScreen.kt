@@ -2,7 +2,6 @@ package com.example.cleanarchitectureexample.ui.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
@@ -24,34 +23,42 @@ import coil.compose.AsyncImage
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
     val imageUrl by viewModel.profileImageUrl.collectAsState()
-    Column {
-        ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val (profileImage, logoutButton) = createRefs()
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val (profileImage, logoutButton, closeButton) = createRefs()
 
-            ProfileImage(
-                modifier = Modifier
-                    .requiredSize(160.dp)
-                    .constrainAs(profileImage) {
-                        top.linkTo(parent.top, 100.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                imageUrl = imageUrl
-            )
-            Button(
-                modifier = Modifier
-                    .requiredHeight(48.dp)
-                    .constrainAs(logoutButton) {
-                        bottom.linkTo(parent.bottom, 36.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                onClick = viewModel::logoutButtonClicked
-            ) {
-                Text(text = "LOGOUT")
-            }
+        ProfileImage(
+            modifier = Modifier
+                .requiredSize(160.dp)
+                .constrainAs(profileImage) {
+                    top.linkTo(parent.top, 100.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            imageUrl = imageUrl
+        )
+        Button(
+            modifier = Modifier
+                .requiredHeight(48.dp)
+                .constrainAs(logoutButton) {
+                    bottom.linkTo(parent.bottom, 36.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            onClick = viewModel::logoutButtonClicked
+        ) {
+            Text(text = "LOGOUT")
+        }
+        Button(
+            modifier = Modifier
+                .constrainAs(closeButton) {
+                    top.linkTo(parent.top, 8.dp)
+                    end.linkTo(parent.end, 12.dp)
+                },
+            onClick = viewModel::closeButtonClicked
+        ) {
+            Text(text = "CLOSE")
         }
     }
 }

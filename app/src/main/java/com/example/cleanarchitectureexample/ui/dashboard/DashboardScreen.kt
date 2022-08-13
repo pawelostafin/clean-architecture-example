@@ -1,7 +1,6 @@
 package com.example.cleanarchitectureexample.ui.dashboard
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
+import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
@@ -61,7 +61,7 @@ fun ProfileButton(
             .requiredSize(64.dp)
             .clip(shape)
             .background(color = Color.LightGray)
-            .clickable { onClick.invoke() },
+            .clickableWithRipple { onClick.invoke() },
         contentAlignment = Alignment.Center
     ) {
         when (state) {
