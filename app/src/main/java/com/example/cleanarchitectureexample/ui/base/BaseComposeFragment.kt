@@ -52,6 +52,7 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
 
         val composeView = view.findViewById<ComposeView>(R.id.composeView)
         composeView?.apply {
+            isTransitionGroup = true
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner))
             setContent {
                 val progressDialogVisibility by viewModel.progressDialogVisibility.collectAsState()

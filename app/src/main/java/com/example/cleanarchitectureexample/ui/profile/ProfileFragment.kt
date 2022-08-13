@@ -1,9 +1,8 @@
 package com.example.cleanarchitectureexample.ui.profile
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.navigation.NavTransition
 import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
@@ -36,7 +35,8 @@ class ProfileFragment : BaseComposeFragment<ProfileViewModel>() {
     private fun navigateToLogin() {
         navigate(
             fragmentResId = R.id.loginFragment,
-            popUpTo = R.id.main_graph
+            popUpTo = R.id.main_graph,
+            transition = NavTransition.FADE
         )
     }
 

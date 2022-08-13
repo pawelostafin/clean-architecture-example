@@ -2,6 +2,7 @@ package com.example.cleanarchitectureexample.ui.splash
 
 import androidx.compose.runtime.Composable
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.navigation.NavTransition
 import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
@@ -35,14 +36,16 @@ class SplashFragment : BaseComposeFragment<SplashViewModel>() {
     private fun navigateToDashboard() {
         navigate(
             fragmentResId = R.id.dashboardFragment,
-            popUpTo = R.id.main_graph
+            popUpTo = R.id.main_graph,
+            transition = NavTransition.FADE
         )
     }
 
     private fun navigateToLogin() {
         navigate(
             fragmentResId = R.id.loginFragment,
-            popUpTo = R.id.main_graph
+            popUpTo = R.id.main_graph,
+            transition = NavTransition.FADE
         )
     }
 

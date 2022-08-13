@@ -34,10 +34,7 @@ class ProfileViewModel(
     }
 
     fun logoutButtonClicked() {
-        viewModelLaunch(
-            onProgressChanged = ::setProgressDialogVisibility,
-            onError = ::showErrorDialog
-        ) {
+        viewModelLaunch {
             logoutUseCase.execute()
             _navigation.trySend(Navigation.Login)
         }
