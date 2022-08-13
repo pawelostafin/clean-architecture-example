@@ -27,9 +27,6 @@ class LoginViewModel(
     private val _loginButtonState = MutableStateFlow(ButtonState.CLICKABLE)
     val loginButtonState = _loginButtonState.asStateFlow()
 
-    private val _loginErrorDialogVisible = MutableStateFlow(false)
-    val loginErrorDialogVisible = _loginErrorDialogVisible.asStateFlow()
-
     fun loginChangeRequested(newValue: String) {
         _loginFieldState.value = _loginFieldState.value.copy(text = newValue)
     }
@@ -59,10 +56,6 @@ class LoginViewModel(
         _loginFieldState.value = _loginFieldState.value.copy(isEnabled = !inProgress)
         _passwordFieldState.value = _passwordFieldState.value.copy(isEnabled = !inProgress)
         _loginButtonState.value = if (inProgress) ButtonState.IN_PROGRESS else ButtonState.CLICKABLE
-    }
-
-    fun loginErrorDialogDismissRequest() {
-        _loginErrorDialogVisible.value = false
     }
 
     private fun getInitialLogin(): FieldState {
