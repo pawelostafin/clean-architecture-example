@@ -34,7 +34,8 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
 
     private fun navigateToProfile() {
         navigate(
-            fragmentResId = R.id.profileFragment
+            fragmentResId = R.id.profileFragment,
+            transition = NavTransition.BOTTOM
         )
     }
 

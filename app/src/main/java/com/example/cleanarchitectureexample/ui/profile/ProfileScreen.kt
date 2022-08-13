@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -41,8 +42,9 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             )
             Button(
                 modifier = Modifier
+                    .requiredHeight(48.dp)
                     .constrainAs(logoutButton) {
-                        top.linkTo(profileImage.bottom, 50.dp)
+                        bottom.linkTo(parent.bottom, 36.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     },
