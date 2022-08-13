@@ -52,6 +52,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
         }
         Button(
             modifier = Modifier
+                .requiredHeight(48.dp)
                 .constrainAs(closeButton) {
                     top.linkTo(parent.top, 8.dp)
                     end.linkTo(parent.end, 12.dp)
