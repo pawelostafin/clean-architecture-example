@@ -1,4 +1,4 @@
-package com.example.cleanarchitectureexample.ui.login
+package com.example.cleanarchitectureexample.ui.splash
 
 import androidx.compose.runtime.Composable
 import com.example.cleanarchitectureexample.R
@@ -8,12 +8,12 @@ import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
 import com.example.cleanarchitectureexample.ui.base.observe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment : BaseComposeFragment<LoginViewModel>() {
+class SplashFragment : BaseComposeFragment<SplashViewModel>() {
 
-    override val viewModel: LoginViewModel by viewModel()
+    override val viewModel: SplashViewModel by viewModel()
 
     @Composable
-    override fun ContentView() = LoginScreen(viewModel)
+    override fun ContentView() = SplashScreen(viewModel)
 
     override fun onBackPressed() {
         viewModel.backButtonClicked()
@@ -24,16 +24,24 @@ class LoginFragment : BaseComposeFragment<LoginViewModel>() {
         observe(viewModel.navigation, ::handleNavigation)
     }
 
-    private fun handleNavigation(navigation: LoginViewModel.Navigation) {
+    private fun handleNavigation(navigation: SplashViewModel.Navigation) {
         when (navigation) {
-            LoginViewModel.Navigation.Back -> navigateBack()
-            LoginViewModel.Navigation.Dashboard -> navigateToDashboard()
+            SplashViewModel.Navigation.Back -> navigateBack()
+            SplashViewModel.Navigation.Dashboard -> navigateToDashboard()
+            SplashViewModel.Navigation.Login -> navigateToLogin()
         }
     }
 
     private fun navigateToDashboard() {
         navigate(
             fragmentResId = R.id.dashboardFragment,
+            popUpTo = R.id.main_graph
+        )
+    }
+
+    private fun navigateToLogin() {
+        navigate(
+            fragmentResId = R.id.loginFragment,
             popUpTo = R.id.main_graph
         )
     }

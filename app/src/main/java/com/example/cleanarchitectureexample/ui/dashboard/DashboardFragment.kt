@@ -1,6 +1,8 @@
 package com.example.cleanarchitectureexample.ui.dashboard
 
 import androidx.compose.runtime.Composable
+import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
 import com.example.cleanarchitectureexample.ui.base.observe
@@ -21,9 +23,7 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
     private fun handleNavigation(navigation: DashboardViewModel.Navigation) {
         when (navigation) {
             DashboardViewModel.Navigation.Back -> navigateBack()
-            DashboardViewModel.Navigation.Profile -> {
-                // TODO: implement profile screen navigation
-            }
+            DashboardViewModel.Navigation.Profile -> navigate(fragmentResId = R.id.profileFragment)
         }
     }
 

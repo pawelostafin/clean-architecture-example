@@ -82,7 +82,7 @@ class LoginViewModel(
     }
 
     companion object {
-        private const val DEBUG_LOGIN = "user"
+        private const val DEBUG_LOGIN = "user1"
         private const val DEBUG_PASSWORD = "test1"
     }
 

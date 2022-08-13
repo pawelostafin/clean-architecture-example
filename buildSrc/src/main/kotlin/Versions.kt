@@ -9,6 +9,8 @@ object Versions {
     const val compose = "1.2.1"
     const val composeCompiler = "1.3.0"
     const val activityCompose = "1.5.1"
+    const val coilCompose = "2.1.0"
+    const val constraintLayoutCompose = "1.0.1"
     const val material = "1.6.1"
     const val lifecycle = "2.5.1"
     const val preference = "1.2.0"

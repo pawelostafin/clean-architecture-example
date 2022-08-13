@@ -18,5 +18,13 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.cleanarchitectureexample.ui.dashboard.DashboardFragment"
         android:label="DashboardFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.cleanarchitectureexample.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.cleanarchitectureexample.ui.splash.SplashFragment"
+        android:label="SplashFragment" />
 
 </navigation>

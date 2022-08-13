@@ -71,10 +71,10 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
         viewModel.initializeIfNeeded()
     }
 
-    protected abstract fun onBackPressed()
-
     @Composable
     protected abstract fun ContentView()
+
+    protected abstract fun onBackPressed()
 
     @CallSuper
     protected open fun initObservers() = Unit

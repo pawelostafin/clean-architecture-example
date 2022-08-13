@@ -70,6 +70,9 @@ dependencies {
     implementation(Libs.composeMaterial)
     implementation(Libs.composeUiToolingPreview)
     implementation(Libs.activityCompose)
+    implementation(Libs.coilCompose)
+    implementation(Libs.constraintLayoutCompose)
+    implementation(Libs.preference)
 
     implementation(Libs.material)
     implementation(Libs.appCompat)

@@ -6,6 +6,8 @@ object Libs {
     const val composeMaterial = "androidx.compose.material:material:" + Versions.compose
     const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview:" + Versions.compose
     const val activityCompose = "androidx.activity:activity-compose:" + Versions.activityCompose
+    const val coilCompose = "io.coil-kt:coil-compose:" + Versions.coilCompose
+    const val constraintLayoutCompose = "androidx.constraintlayout:constraintlayout-compose:" + Versions.constraintLayoutCompose
 
     const val material = "com.google.android.material:material:" + Versions.material
     const val appCompat = "androidx.appcompat:appcompat:" + Versions.appcompat
