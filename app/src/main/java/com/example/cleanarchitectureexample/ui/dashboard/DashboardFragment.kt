@@ -2,6 +2,7 @@ package com.example.cleanarchitectureexample.ui.dashboard
 
 import androidx.compose.runtime.Composable
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.navigation.NavTransition
 import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
@@ -23,12 +24,18 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
     private fun handleNavigation(navigation: DashboardViewModel.Navigation) {
         when (navigation) {
             DashboardViewModel.Navigation.Back -> navigateBack()
-            DashboardViewModel.Navigation.Profile -> navigate(fragmentResId = R.id.profileFragment)
+            DashboardViewModel.Navigation.Profile -> navigateToProfile()
         }
     }
 
     override fun onBackPressed() {
         viewModel.backButtonClicked()
+    }
+
+    private fun navigateToProfile() {
+        navigate(
+            fragmentResId = R.id.profileFragment
+        )
     }
 
 }

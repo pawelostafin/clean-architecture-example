@@ -21,7 +21,7 @@ class FakeAuthServiceImpl : AuthService {
             ),
             FakeAuthData(
                 login = "user2",
-                password = "test1",
+                password = "test2",
                 userId = 2
             ),
             FakeAuthData(

@@ -31,7 +31,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
             ProfileImage(
                 modifier = Modifier
-                    .requiredSize(100.dp)
+                    .requiredSize(160.dp)
                     .constrainAs(profileImage) {
                         top.linkTo(parent.top, 100.dp)
                         start.linkTo(parent.start)

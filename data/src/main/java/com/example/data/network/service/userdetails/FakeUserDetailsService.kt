@@ -26,22 +26,22 @@ class FakeUserDetailsService : UserDetailsService {
         private val FAKE_USER_DETAILS = listOf(
             UserDetailsDto(
                 id = 1,
-                firstName = "first1",
-                lastName = "last1",
+                firstName = "Tony",
+                lastName = "Spagetti",
                 imageUrl = "https://static.posters.cz/image/1300/plakaty/pokemon-pikachu-neon-i71936.jpg",
                 description = "user description 1"
             ),
             UserDetailsDto(
                 id = 2,
-                firstName = "first2",
-                lastName = "last2",
+                firstName = "Frank",
+                lastName = "Jacobs",
                 imageUrl = null,
                 description = "user description 2"
             ),
             UserDetailsDto(
                 id = 3,
-                firstName = "first3",
-                lastName = "last3",
+                firstName = "Tom",
+                lastName = "Slovak",
                 imageUrl = null,
                 description = "user description 3"
             )
