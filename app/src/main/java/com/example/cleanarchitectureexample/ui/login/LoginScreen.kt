@@ -1,16 +1,25 @@
 package com.example.cleanarchitectureexample.ui.login
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -20,16 +29,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.model.ButtonState
+import com.example.cleanarchitectureexample.ui.model.FieldState
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
-    val login by viewModel.login.collectAsState()
-    val password by viewModel.password.collectAsState()
+    val login by viewModel.loginState.collectAsState()
+    val password by viewModel.passwordState.collectAsState()
     val loginButtonState by viewModel.loginButtonState.collectAsState()
+    val loginErrorDialogVisible by viewModel.loginErrorDialogVisible.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,6 +66,34 @@ fun LoginScreen(viewModel: LoginViewModel) {
         )
     }
 
+    if (loginErrorDialogVisible) {
+        LoginErrorDialog(
+            onDismissRequest = viewModel::loginErrorDialogDismissRequest
+        )
+    }
+}
+
+@Composable
+fun TextButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier
+        .clip(RoundedCornerShape(8.dp))
+        .clickable { onClick.invoke() }
+        .padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 8.dp,
+            bottom = 8.dp
+        )
+    ) {
+        Text(
+            text = text,
+            color = MaterialTheme.colors.primary
+        )
+    }
 }
 
 @Composable
@@ -73,60 +114,31 @@ fun CustomTextField(
 
 @Composable
 fun LoginButton(
-    state: LoginButtonState,
+    state: ButtonState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
-        enabled = state == LoginButtonState.CLICKABLE,
-        modifier = modifier.animateContentSize()
+        enabled = state == ButtonState.CLICKABLE,
+        modifier = modifier.requiredHeight(48.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Row(
+            modifier = modifier.animateContentSize(
+                animationSpec = tween()
+            )
         ) {
-            when (state) {
-                LoginButtonState.IN_PROGRESS -> {
-                    CircularProgressIndicator(
-                        color = Color.White
-                    )
-                }
-                LoginButtonState.CLICKABLE -> {
-                    Text(
-                        text = stringResource(R.string.button_login),
-                    )
-                }
+            Text(
+                text = stringResource(R.string.button_login),
+            )
+            if (state == ButtonState.IN_PROGRESS) {
+                Spacer(modifier = Modifier.width(8.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    color = Color.Gray,
+                    strokeWidth = 2.dp
+                )
             }
         }
     }
-}
-
-@Composable
-fun ComposeProgressDialog() {
-    val backgroundColor = remember { Color.Black.withAlpha(0.3f) }
-    Box(
-        modifier = Modifier
-            .noRippleClickable {}
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-fun Color.withAlpha(alpha: Float): Color {
-    return Color(
-        red = red,
-        green = green,
-        blue = blue,
-        alpha = alpha
-    )
-}
-
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() },
-        onClick = onClick
-    )
 }

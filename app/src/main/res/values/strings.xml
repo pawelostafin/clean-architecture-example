@@ -3,4 +3,8 @@
     <string name="hint_password">Password</string>
     <string name="hint_login">Login</string>
     <string name="button_login">LOGIN</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_message">invalid credentials</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="error_message_unexpected">Unexpected error occurred</string>
 </resources>

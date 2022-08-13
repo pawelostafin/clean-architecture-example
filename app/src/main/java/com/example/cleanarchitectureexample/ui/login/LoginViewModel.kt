@@ -5,6 +5,8 @@ import com.example.cleanarchitectureexample.ui.base.BaseViewModel
 import com.example.cleanarchitectureexample.ui.base.EventChannel
 import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
+import com.example.cleanarchitectureexample.ui.model.ButtonState
+import com.example.cleanarchitectureexample.ui.model.FieldState
 import com.example.domain.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,24 +18,24 @@ class LoginViewModel(
     private val _navigation = EventChannel<Navigation>()
     val navigation = _navigation.asFlow()
 
-    private val _login = MutableStateFlow(getInitialLogin())
-    val login = _login.asStateFlow()
+    private val _loginFieldState = MutableStateFlow(getInitialLogin())
+    val loginState = _loginFieldState.asStateFlow()
 
-    private val _password = MutableStateFlow(getInitialPassword())
-    val password = _password.asStateFlow()
+    private val _passwordFieldState = MutableStateFlow(getInitialPassword())
+    val passwordState = _passwordFieldState.asStateFlow()
 
-    private val _loginButtonState = MutableStateFlow(LoginButtonState.CLICKABLE)
+    private val _loginButtonState = MutableStateFlow(ButtonState.CLICKABLE)
     val loginButtonState = _loginButtonState.asStateFlow()
 
     private val _loginErrorDialogVisible = MutableStateFlow(false)
     val loginErrorDialogVisible = _loginErrorDialogVisible.asStateFlow()
 
     fun loginChangeRequested(newValue: String) {
-        _login.value = _login.value.copy(text = newValue)
+        _loginFieldState.value = _loginFieldState.value.copy(text = newValue)
     }
 
     fun passwordChangeRequested(newValue: String) {
-        _password.value = _password.value.copy(text = newValue)
+        _passwordFieldState.value = _passwordFieldState.value.copy(text = newValue)
     }
 
     fun backButtonClicked() {
@@ -43,23 +45,23 @@ class LoginViewModel(
     fun loginButtonClicked() {
         viewModelLaunch(
             onProgressChanged = ::setFormInProgress,
-            onError = { _loginErrorDialogVisible.value = true }
+            onError = { showErrorDialog(it) }
         ) {
             loginUseCase.execute(
-                login = _login.value.text,
-                password = _password.value.text
+                login = _loginFieldState.value.text,
+                password = _passwordFieldState.value.text
             )
             _navigation.trySend(Navigation.Dashboard)
         }
     }
 
     private fun setFormInProgress(inProgress: Boolean) {
-        _login.value = _login.value.copy(isEnabled = !inProgress)
-        _password.value = _password.value.copy(isEnabled = !inProgress)
-        _loginButtonState.value = if (inProgress) LoginButtonState.IN_PROGRESS else LoginButtonState.CLICKABLE
+        _loginFieldState.value = _loginFieldState.value.copy(isEnabled = !inProgress)
+        _passwordFieldState.value = _passwordFieldState.value.copy(isEnabled = !inProgress)
+        _loginButtonState.value = if (inProgress) ButtonState.IN_PROGRESS else ButtonState.CLICKABLE
     }
 
-    fun loginErrorDialogDismissed() {
+    fun loginErrorDialogDismissRequest() {
         _loginErrorDialogVisible.value = false
     }
 
@@ -93,13 +95,3 @@ class LoginViewModel(
 
 }
 
-data class FieldState(
-    val text: String,
-    val isEnabled: Boolean,
-    val isValid: Boolean
-)
-
-enum class LoginButtonState {
-    IN_PROGRESS,
-    CLICKABLE
-}

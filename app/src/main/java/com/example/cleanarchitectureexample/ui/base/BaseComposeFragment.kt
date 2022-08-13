@@ -10,24 +10,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.utli.dialog.ComposeProgressDialog
+import com.example.cleanarchitectureexample.ui.utli.dialog.ErrorDialog
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
 
@@ -52,15 +52,18 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
 
         val composeView = view.findViewById<ComposeView>(R.id.composeView)
         composeView?.apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner))
             setContent {
+                val progressDialogVisibility by viewModel.progressDialogVisibility.collectAsState()
+                val errorDialogState by viewModel.errorDialogState.collectAsState()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
                     ContentView()
+                    ProgressDialogHandler(isVisible = progressDialogVisibility)
+                    ErrorDialogHandler(state = errorDialogState)
                 }
             }
         }
@@ -68,19 +71,43 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
         viewModel.initializeIfNeeded()
     }
 
+    protected abstract fun onBackPressed()
+
     @Composable
-    abstract fun ContentView()
+    protected abstract fun ContentView()
 
     @CallSuper
-    protected open fun initObservers() {
-
-    }
+    protected open fun initObservers() = Unit
 
     private fun setupOnBackPressedDispatcher() {
         interceptActivityOnBackPressed { onBackPressed() }
     }
 
-    abstract fun onBackPressed()
+    @Composable
+    private fun ProgressDialogHandler(isVisible: Boolean) {
+        if (isVisible) {
+            ComposeProgressDialog()
+        }
+    }
+
+    @Composable
+    private fun ErrorDialogHandler(state: ErrorDialogState) {
+        when (state) {
+            ErrorDialogState.Hidden -> Unit
+            is ErrorDialogState.Visible -> {
+                ErrorDialog(
+                    message = state.throwable.toErrorMessage(),
+                    onDismissRequest = viewModel::errorDialogDismissRequested
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun Throwable.toErrorMessage(): String {
+        val default = stringResource(R.string.error_message_unexpected)
+        return message ?: default
+    }
 
 }
 

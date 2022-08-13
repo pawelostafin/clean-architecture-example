@@ -28,11 +28,16 @@ class LoginFragment : BaseComposeFragment<LoginViewModel>() {
     private fun handleNavigation(navigation: LoginViewModel.Navigation) {
         when (navigation) {
             LoginViewModel.Navigation.Back -> navigateBack()
-            LoginViewModel.Navigation.Dashboard -> {
-                val options = navOptions { popUpTo(id = R.id.main_graph) }
-                findNavController().navigate(R.id.testFragment, null, options)
-            }
+            LoginViewModel.Navigation.Dashboard -> navigateToDashboard()
         }
+    }
+
+    private fun navigateToDashboard() {
+        findNavController().navigate(
+            resId = R.id.dashboardFragment,
+            args = null,
+            navOptions = navOptions { popUpTo(id = R.id.main_graph) }
+        )
     }
 
 }

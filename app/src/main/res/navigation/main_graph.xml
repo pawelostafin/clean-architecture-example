@@ -14,5 +14,9 @@
         android:id="@+id/loginFragment"
         android:name="com.example.cleanarchitectureexample.ui.login.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.cleanarchitectureexample.ui.dashboard.DashboardFragment"
+        android:label="DashboardFragment" />
 
 </navigation>
