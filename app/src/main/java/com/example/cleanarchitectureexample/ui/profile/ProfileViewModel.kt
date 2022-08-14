@@ -17,15 +17,20 @@ class ProfileViewModel(
     private val _navigation = EventChannel<Navigation>()
     val navigation = _navigation.asFlow()
 
-    private val _profileImageUrl = MutableStateFlow<String?>(null)
-    val profileImageUrl = _profileImageUrl.asStateFlow()
+    private val _profileInfo = MutableStateFlow<ProfileInfo?>(null)
+    val profileInfo = _profileInfo.asStateFlow()
 
     override fun initialize() {
         super.initialize()
 
         viewModelLaunch {
             val userDetails = getUserDetailsUseCase.execute()
-            _profileImageUrl.value = userDetails.imageUrl
+            _profileInfo.value = ProfileInfo(
+                fullName = "${userDetails.firstName} ${userDetails.lastName}".trim(),
+                description = userDetails.description,
+                imageUrl = userDetails.imageUrl,
+                firstLetterOfTheFirstName = userDetails.firstLetterOfFirstName
+            )
         }
     }
 
@@ -50,3 +55,10 @@ class ProfileViewModel(
     }
 
 }
+
+data class ProfileInfo(
+    val fullName: String,
+    val description: String?,
+    val imageUrl: String?,
+    val firstLetterOfTheFirstName: String
+)

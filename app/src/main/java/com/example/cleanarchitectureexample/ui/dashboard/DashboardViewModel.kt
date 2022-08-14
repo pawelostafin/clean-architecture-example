@@ -30,14 +30,9 @@ class DashboardViewModel(
             onError = ::showErrorDialog,
         ) {
             val userDetails = getUserDetailsUseCase.execute()
-            val firstLetter = userDetails.firstName
-                .takeIf { it.isNotBlank() }
-                ?.take(1)
-                ?.uppercase()
-                ?: ""
             val profileButtonState = ProfileButtonState.Data(
                 imageUrl = userDetails.imageUrl,
-                firstLetterOfFirstName = firstLetter
+                firstLetterOfFirstName = userDetails.firstLetterOfFirstName
             )
             _profileButtonState.value = profileButtonState
         }
