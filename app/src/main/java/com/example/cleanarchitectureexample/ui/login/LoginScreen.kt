@@ -44,7 +44,10 @@ fun LoginScreen(viewModel: LoginViewModel) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .background(AppTheme.colors.backgroundPrimary)
-            .padding(start = 48.dp, end = 48.dp)
+            .padding(
+                start = 48.dp,
+                end = 48.dp
+            )
     ) {
         CustomTextField(
             state = login,
@@ -80,10 +83,10 @@ fun TextButton(
         .clip(RoundedCornerShape(8.dp))
         .clickable { onClick.invoke() }
         .padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 8.dp,
-            bottom = 8.dp
+            start = 18.dp,
+            end = 18.dp,
+            top = 10.dp,
+            bottom = 10.dp
         )
     ) {
         Text(
