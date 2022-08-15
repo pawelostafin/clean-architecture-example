@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,7 +59,7 @@ fun ProfileButton(
         modifier = modifier
             .requiredSize(64.dp)
             .clip(shape)
-            .background(AppTheme.colors.primary.withAlpha(0.2f))
+            .background(AppTheme.colors.profileImageBorder.withAlpha(0.2f))
             .padding(2.dp)
             .clip(shape)
             .background(AppTheme.colors.backgroundSecondary)

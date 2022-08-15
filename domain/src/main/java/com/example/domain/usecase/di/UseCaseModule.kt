@@ -4,6 +4,8 @@ import com.example.domain.usecase.GetUserDetailsUseCase
 import com.example.domain.usecase.IsUserLoggedInUseCase
 import com.example.domain.usecase.LoginUseCase
 import com.example.domain.usecase.LogoutUseCase
+import com.example.domain.usecase.ObserveDarkThemeModeUseCase
+import com.example.domain.usecase.SetDarkThemeModeUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -29,6 +31,18 @@ val useCaseModule = module {
     factory {
         IsUserLoggedInUseCase(
             authRepository = get()
+        )
+    }
+
+    factory {
+        ObserveDarkThemeModeUseCase(
+            settingsRepository = get()
+        )
+    }
+
+    factory {
+        SetDarkThemeModeUseCase(
+            settingsRepository = get()
         )
     }
 

@@ -39,7 +39,8 @@ fun ErrorDialog(
                 ) {
                     TextButton(
                         text = stringResource(R.string.dialog_button_ok),
-                        onClick = onDismissRequest
+                        onClick = onDismissRequest,
+                        textColor = AppTheme.colors.dialogButton
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                 }

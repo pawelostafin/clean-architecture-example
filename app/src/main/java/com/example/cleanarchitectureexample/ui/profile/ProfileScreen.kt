@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
-import com.example.cleanarchitectureexample.ui.theme.AppColors
+import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
@@ -80,16 +81,15 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                     width = Dimension.fillToConstraints
                 }
         ) {
-            ProfileButton(
-                text = "SETTINGS",
+            ProfileListButton(
+                text = stringResource(R.string.profile_button_settings),
                 modifier = Modifier
                     .height(48.dp),
-//                onClick = viewModel::logoutButtonClicked
-                onClick = {}
+                onClick = viewModel::settingsButtonClicked
             )
             ProfileDivider()
-            ProfileButton(
-                text = "LOGOUT",
+            ProfileListButton(
+                text = stringResource(id = R.string.profile_button_logout),
                 modifier = Modifier
                     .height(48.dp),
                 onClick = viewModel::logoutButtonClicked
@@ -152,7 +152,7 @@ fun ProfileImage(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(AppTheme.colors.primary.withAlpha(0.2f))
+            .background(AppTheme.colors.profileImageBorder.withAlpha(0.2f))
             .padding(3.dp)
             .clip(CircleShape)
             .background(AppTheme.colors.backgroundSecondary),
@@ -167,7 +167,7 @@ fun ProfileImage(
 }
 
 @Composable
-fun ProfileButton(
+fun ProfileListButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier

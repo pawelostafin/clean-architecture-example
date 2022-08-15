@@ -26,5 +26,9 @@
         android:id="@+id/splashFragment"
         android:name="com.example.cleanarchitectureexample.ui.splash.SplashFragment"
         android:label="SplashFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.cleanarchitectureexample.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>

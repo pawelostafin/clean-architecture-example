@@ -73,6 +73,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
 fun TextButton(
     text: String,
     onClick: () -> Unit,
+    textColor: Color,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier
@@ -87,7 +88,7 @@ fun TextButton(
     ) {
         Text(
             text = text,
-            color = AppTheme.colors.primary,
+            color = textColor,
             letterSpacing = 1.sp
         )
     }

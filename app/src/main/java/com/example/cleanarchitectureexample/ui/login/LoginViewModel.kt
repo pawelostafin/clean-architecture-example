@@ -41,8 +41,8 @@ class LoginViewModel(
             onError = { showErrorDialog(it) }
         ) {
             loginUseCase.execute(
-                login = _loginFieldState.value.text,
-                password = _passwordFieldState.value.text
+                login = _loginFieldState.value.text.trim(),
+                password = _passwordFieldState.value.text.trim()
             )
             _navigation.trySend(Navigation.Dashboard)
         }

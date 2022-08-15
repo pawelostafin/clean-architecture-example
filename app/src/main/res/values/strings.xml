@@ -7,4 +7,9 @@
     <string name="error_dialog_message">invalid credentials</string>
     <string name="dialog_button_ok">OK</string>
     <string name="error_message_unexpected">Unexpected error occurred</string>
+    <string name="profile_button_logout">LOGOUT</string>
+    <string name="profile_button_settings">SETTINGS</string>
+    <string name="settings_dark_mode_enabled">Enabled</string>
+    <string name="settings_dark_mode_disabled">Disabled</string>
+    <string name="settings_dark_mode_auto">Auto</string>
 </resources>

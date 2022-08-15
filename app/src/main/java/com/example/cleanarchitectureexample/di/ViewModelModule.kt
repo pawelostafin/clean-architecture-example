@@ -4,6 +4,7 @@ import com.example.cleanarchitectureexample.ui.dashboard.DashboardViewModel
 import com.example.cleanarchitectureexample.ui.login.LoginViewModel
 import com.example.cleanarchitectureexample.ui.main.MainViewModel
 import com.example.cleanarchitectureexample.ui.profile.ProfileViewModel
+import com.example.cleanarchitectureexample.ui.settings.SettingsViewModel
 import com.example.cleanarchitectureexample.ui.splash.SplashViewModel
 import com.example.cleanarchitectureexample.ui.test.TestViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -41,6 +42,13 @@ val viewModelModule = module {
     viewModel {
         SplashViewModel(
             isUserLoggedInUseCase = get()
+        )
+    }
+
+    viewModel {
+        SettingsViewModel(
+            observeDarkThemeModeUseCase = get(),
+            setDarkThemeModeUseCase = get()
         )
     }
 

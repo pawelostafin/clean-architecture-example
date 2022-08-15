@@ -49,9 +49,14 @@ class ProfileViewModel(
         _navigation.trySend(Navigation.Back)
     }
 
+    fun settingsButtonClicked() {
+        _navigation.trySend(Navigation.Settings)
+    }
+
     sealed class Navigation {
         object Back : Navigation()
         object Login : Navigation()
+        object Settings : Navigation()
     }
 
 }

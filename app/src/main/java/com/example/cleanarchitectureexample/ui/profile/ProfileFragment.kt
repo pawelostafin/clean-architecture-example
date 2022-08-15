@@ -29,6 +29,7 @@ class ProfileFragment : BaseComposeFragment<ProfileViewModel>() {
         when (navigation) {
             ProfileViewModel.Navigation.Back -> navigateBack()
             ProfileViewModel.Navigation.Login -> navigateToLogin()
+            ProfileViewModel.Navigation.Settings -> navigateToSettings()
         }
     }
 
@@ -37,6 +38,13 @@ class ProfileFragment : BaseComposeFragment<ProfileViewModel>() {
             fragmentResId = R.id.loginFragment,
             popUpTo = R.id.main_graph,
             transition = NavTransition.FADE
+        )
+    }
+
+    private fun navigateToSettings() {
+        navigate(
+            fragmentResId = R.id.settingsFragment,
+            transition = NavTransition.RIGHT
         )
     }
 
