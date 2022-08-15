@@ -5,7 +5,6 @@ import com.example.cleanarchitectureexample.ui.base.BaseViewModel
 import com.example.cleanarchitectureexample.ui.base.EventChannel
 import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
-import com.example.cleanarchitectureexample.ui.model.ButtonState
 import com.example.cleanarchitectureexample.ui.model.FieldState
 import com.example.domain.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,9 +23,6 @@ class LoginViewModel(
     private val _passwordFieldState = MutableStateFlow(getInitialPassword())
     val passwordState = _passwordFieldState.asStateFlow()
 
-    private val _loginButtonState = MutableStateFlow(ButtonState.CLICKABLE)
-    val loginButtonState = _loginButtonState.asStateFlow()
-
     fun loginChangeRequested(newValue: String) {
         _loginFieldState.value = _loginFieldState.value.copy(text = newValue)
     }
@@ -41,7 +37,7 @@ class LoginViewModel(
 
     fun loginButtonClicked() {
         viewModelLaunch(
-            onProgressChanged = ::setFormInProgress,
+            onProgressChanged = ::setProgressDialogVisibility,
             onError = { showErrorDialog(it) }
         ) {
             loginUseCase.execute(
@@ -50,12 +46,6 @@ class LoginViewModel(
             )
             _navigation.trySend(Navigation.Dashboard)
         }
-    }
-
-    private fun setFormInProgress(inProgress: Boolean) {
-        _loginFieldState.value = _loginFieldState.value.copy(isEnabled = !inProgress)
-        _passwordFieldState.value = _passwordFieldState.value.copy(isEnabled = !inProgress)
-        _loginButtonState.value = if (inProgress) ButtonState.IN_PROGRESS else ButtonState.CLICKABLE
     }
 
     private fun getInitialLogin(): FieldState {

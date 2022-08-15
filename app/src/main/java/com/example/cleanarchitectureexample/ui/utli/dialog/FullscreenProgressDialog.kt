@@ -2,16 +2,16 @@ package com.example.cleanarchitectureexample.ui.utli.dialog
 
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
 
 @Composable
-fun ComposeProgressDialog() {
+fun FullscreenProgressDialog() {
     Dialog(
         onDismissRequest = {}
     ) {
         CircularProgressIndicator(
-            color = Color.White
+            color = AppTheme.colors.primary
         )
     }
 }

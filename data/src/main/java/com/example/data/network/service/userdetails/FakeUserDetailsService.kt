@@ -14,7 +14,7 @@ class FakeUserDetailsService : UserDetailsService {
     override suspend fun getUserDetails(userId: Long): UserDetailsDto {
         mutex.withLock {
             if (isFirstRequest.getAndSet(false)) {
-                delay(3000)
+                delay(1000)
             }
         }
         return FAKE_USER_DETAILS

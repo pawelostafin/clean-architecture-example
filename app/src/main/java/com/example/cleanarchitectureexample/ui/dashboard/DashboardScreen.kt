@@ -2,6 +2,7 @@ package com.example.cleanarchitectureexample.ui.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -15,21 +16,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
+import com.example.cleanarchitectureexample.ui.utli.withAlpha
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
-
     val profileButtonState by viewModel.profileButtonState.collectAsState()
 
-    ConstraintLayout {
+    ConstraintLayout(
+        modifier = Modifier
+            .background(color = AppTheme.colors.backgroundPrimary)
+    ) {
         val (profileButton) = createRefs()
 
         ProfileButton(
@@ -54,13 +58,12 @@ fun ProfileButton(
     val shape = remember { CircleShape }
     Box(
         modifier = modifier
-            .shadow(
-                elevation = 12.dp,
-                shape = shape
-            )
             .requiredSize(64.dp)
             .clip(shape)
-            .background(color = Color.LightGray)
+            .background(AppTheme.colors.primary.withAlpha(0.2f))
+            .padding(2.dp)
+            .clip(shape)
+            .background(AppTheme.colors.backgroundSecondary)
             .clickableWithRipple { onClick.invoke() },
         contentAlignment = Alignment.Center
     ) {
@@ -69,7 +72,7 @@ fun ProfileButton(
                 Text(
                     text = state.firstLetterOfFirstName,
                     fontSize = 26.sp,
-                    color = Color.Gray,
+                    color = AppTheme.colors.textColorSecondary,
                     fontWeight = FontWeight.Medium
                 )
                 AsyncImage(
@@ -80,7 +83,7 @@ fun ProfileButton(
             }
             ProfileButtonState.InProgress -> {
                 CircularProgressIndicator(
-                    color = Color.Gray,
+                    color = AppTheme.colors.textColorSecondary,
                     modifier = Modifier.size(24.dp),
                     strokeWidth = 3.dp
                 )

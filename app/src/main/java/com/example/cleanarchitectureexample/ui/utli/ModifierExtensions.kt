@@ -6,6 +6,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
 
 fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
     clickable(
@@ -18,7 +19,10 @@ fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
 fun Modifier.clickableWithRipple(onClick: () -> Unit): Modifier = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = true),
+        indication = rememberRipple(
+            color = AppTheme.colors.ripple,
+            bounded = true
+        ),
         onClick = onClick
     )
 }

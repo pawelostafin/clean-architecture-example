@@ -2,6 +2,7 @@ package com.example.cleanarchitectureexample.ui.login
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,34 +26,44 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.ui.model.ButtonState
-import com.example.cleanarchitectureexample.ui.model.FieldState
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
+import com.example.cleanarchitectureexample.ui.utli.button.CustomButton
+import com.example.cleanarchitectureexample.ui.utli.textfield.CustomTextField
+import com.example.cleanarchitectureexample.ui.utli.textfield.CustomTextFieldType
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
     val login by viewModel.loginState.collectAsState()
     val password by viewModel.passwordState.collectAsState()
-    val loginButtonState by viewModel.loginButtonState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .background(AppTheme.colors.backgroundPrimary)
+            .padding(start = 48.dp, end = 48.dp)
     ) {
         CustomTextField(
             state = login,
             hint = stringResource(id = R.string.hint_login),
-            onValueChange = viewModel::loginChangeRequested
+            onValueChange = viewModel::loginChangeRequested,
+            type = CustomTextFieldType.Text,
+            singleLine = true
         )
-        Spacer(modifier = Modifier.requiredHeight(8.dp))
+        Spacer(modifier = Modifier.requiredHeight(12.dp))
         CustomTextField(
             state = password,
             hint = stringResource(id = R.string.hint_password),
-            onValueChange = viewModel::passwordChangeRequested
+            onValueChange = viewModel::passwordChangeRequested,
+            type = CustomTextFieldType.Password,
+            singleLine = true
         )
         Spacer(modifier = Modifier.requiredHeight(24.dp))
-        LoginButton(
-            state = loginButtonState,
+        CustomButton(
+            text = stringResource(id = R.string.button_login),
             onClick = viewModel::loginButtonClicked
         )
     }
@@ -78,25 +87,10 @@ fun TextButton(
     ) {
         Text(
             text = text,
-            color = MaterialTheme.colors.primary
+            color = AppTheme.colors.primary,
+            letterSpacing = 1.sp
         )
     }
-}
-
-@Composable
-fun CustomTextField(
-    state: FieldState,
-    onValueChange: (newValue: String) -> Unit,
-    hint: String,
-    modifier: Modifier = Modifier
-) {
-    TextField(
-        modifier = modifier,
-        placeholder = { Text(text = hint) },
-        value = state.text,
-        enabled = state.isEnabled,
-        onValueChange = onValueChange
-    )
 }
 
 @Composable

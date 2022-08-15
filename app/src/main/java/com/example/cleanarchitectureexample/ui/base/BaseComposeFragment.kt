@@ -22,7 +22,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.cleanarchitectureexample.R
-import com.example.cleanarchitectureexample.ui.utli.dialog.ComposeProgressDialog
+import com.example.cleanarchitectureexample.ui.utli.dialog.FullscreenProgressDialog
 import com.example.cleanarchitectureexample.ui.utli.dialog.ErrorDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -58,6 +58,9 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
                 val progressDialogVisibility by viewModel.progressDialogVisibility.collectAsState()
                 val errorDialogState by viewModel.errorDialogState.collectAsState()
 
+                MaterialTheme {
+
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -87,7 +90,7 @@ abstract class BaseComposeFragment<ViewModel : BaseViewModel> : Fragment() {
     @Composable
     private fun ProgressDialogHandler(isVisible: Boolean) {
         if (isVisible) {
-            ComposeProgressDialog()
+            FullscreenProgressDialog()
         }
     }
 

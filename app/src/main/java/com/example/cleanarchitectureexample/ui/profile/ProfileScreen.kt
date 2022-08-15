@@ -25,18 +25,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import com.example.cleanarchitectureexample.ui.theme.AppColors
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
+import com.example.cleanarchitectureexample.ui.utli.withAlpha
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
     val profileInfo by viewModel.profileInfo.collectAsState()
-    ConstraintLayout {
+    ConstraintLayout(
+        modifier = Modifier
+            .background(color = AppTheme.colors.backgroundPrimary)
+    ) {
         val (profileImage, buttonsLayout, closeButton, fullNameTextView) = createRefs()
 
         ProfileImage(
@@ -58,13 +65,14 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                     end.linkTo(parent.end)
                 },
             text = profileInfo?.fullName ?: "",
-            fontSize = 26.sp
+            fontSize = 26.sp,
+            color = AppTheme.colors.textColorPrimary
         )
 
         Column(
             modifier = Modifier
                 .constrainAs(buttonsLayout) {
-                    top.linkTo(fullNameTextView.bottom, 12.dp)
+                    top.linkTo(fullNameTextView.bottom, 24.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
@@ -87,7 +95,6 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                 onClick = viewModel::logoutButtonClicked
             )
         }
-
 
         CloseButton(
             modifier = Modifier
@@ -117,7 +124,7 @@ fun CloseButton(
             modifier = Modifier.requiredSize(32.dp),
             painter = rememberVectorPainter(image = Icons.Filled.Close),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(Color.Gray)
+            colorFilter = ColorFilter.tint(AppTheme.colors.textColorSecondary)
         )
     }
 }
@@ -132,7 +139,7 @@ fun ProfileDivider(
             .padding(start = 24.dp, end = 24.dp)
     ) {
         Divider(
-            color = Color.LightGray
+            color = AppTheme.colors.backgroundSecondary
         )
     }
 }
@@ -145,7 +152,10 @@ fun ProfileImage(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(Color.LightGray),
+            .background(AppTheme.colors.primary.withAlpha(0.2f))
+            .padding(3.dp)
+            .clip(CircleShape)
+            .background(AppTheme.colors.backgroundSecondary),
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
@@ -177,7 +187,9 @@ fun ProfileButton(
                 text = text,
                 color = Color.Gray,
                 modifier = Modifier,
-                letterSpacing = 1.sp
+                letterSpacing = 2.sp,
+                fontWeight = FontWeight(450),
+                fontSize = 16.sp
             )
         }
     }
