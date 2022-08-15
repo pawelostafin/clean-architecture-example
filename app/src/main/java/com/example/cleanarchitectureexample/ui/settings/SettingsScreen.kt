@@ -121,7 +121,10 @@ fun DarkModeSettingsItem(
                 DropdownMenu(
                     expanded = isDropdownVisible,
                     onDismissRequest = onDismissRequest,
-                    offset = DpOffset.Zero,
+                    offset = DpOffset(
+                        x = 8.dp,
+                        y = 0.dp
+                    ),
                 ) {
                     DarkThemeMode.values().forEach {
                         Text(
