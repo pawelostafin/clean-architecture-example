@@ -71,8 +71,8 @@ private fun createConstraints(
         val detailsButton = createRefFor(detailsButtonId)
 
         constrain(profileButton) {
-            top.linkTo(parent.top)
-            end.linkTo(parent.end)
+            top.linkTo(parent.top, 8.dp)
+            end.linkTo(parent.end, 8.dp)
         }
         constrain(detailsButton) {
             top.linkTo(parent.top)
@@ -92,7 +92,7 @@ fun ProfileButton(
     val shape = remember { CircleShape }
     Box(
         modifier = modifier
-            .requiredSize(64.dp)
+            .requiredSize(56.dp)
             .clip(shape)
             .background(AppTheme.colors.profileImageBorder.withAlpha(0.2f))
             .padding(2.dp)
