@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +48,7 @@ fun CustomButton(
             .background(color = AppTheme.colors.primary)
             .gestureRecognizer(
                 enabled = enabled,
-                onClick = onClick,
+                onClick = { onClick.invoke() },
                 onPressStart = { scale.value = 0.93f },
                 onPressEnd = { scale.value = 1f },
             )
@@ -66,7 +67,7 @@ fun CustomButton(
 }
 
 fun Modifier.gestureRecognizer(
-    onClick: () -> Unit = {},
+    onClick: (Offset) -> Unit = {},
     onPressStart: () -> Unit = {},
     onPressEnd: () -> Unit = {},
     enabled: Boolean = true
@@ -75,7 +76,7 @@ fun Modifier.gestureRecognizer(
         pointerInput(Unit) {
             detectTapGestures(
                 onTap = {
-                    onClick()
+                    onClick(it)
                 },
                 onPress = {
                     onPressStart()

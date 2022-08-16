@@ -30,8 +30,10 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.example.cleanarchitectureexample.ui.settings.BackButton
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
+import com.example.cleanarchitectureexample.ui.utli.button.gestureRecognizer
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
 import timber.log.Timber
+import kotlin.math.abs
 
 @Composable
 fun DetailsScreen(viewModel: DetailsViewModel) {
@@ -51,7 +53,7 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
     ConstraintLayout(
         modifier = Modifier
             .background(AppTheme.colors.backgroundPrimary),
-        constraintSet = constraints
+        constraintSet = constraints,
     ) {
         BackButton(
             modifier = Modifier.layoutId(backButtonId),
@@ -157,6 +159,9 @@ fun Chart(
     val axisWidth = 2.dp.pxValue
     val axisWidthSecondary = 1.dp.pxValue
     val chartColor = Color(red = 255, green = 69, blue = 58)
+    val selectionCircleRadius = 6.dp.pxValue
+    val selectionLineWidth = 2.dp.pxValue
+    val selectionColor = AppTheme.colors.primary
 
     val lineProgress = remember { Animatable(0f) }
     val backgroundAlpha = remember { Animatable(0f) }
@@ -183,7 +188,17 @@ fun Chart(
         )
     }
 
-    Canvas(modifier = modifier) {
+    val selectionPosition = remember { mutableStateOf<Offset?>(null) }
+
+    Canvas(
+        modifier = modifier
+            .gestureRecognizer(
+                onClick = {
+                    selectionPosition.value = it
+                    Timber.d("ELOELO clicked $it")
+                }
+            )
+    ) {
 //        drawXAxis(
 //            drawScope = this,
 //            color = axisColor,
@@ -191,7 +206,7 @@ fun Chart(
 //            canvasSize = size,
 //            axisWidth = axisWidth,
 //            axisWidthSecondary = axisWidthSecondary,
-//            maxYValue = chartData.maxOf { it.y }
+//            maxXValue = chartData.maxOf { it.x }
 //        )
 //        drawYAxis(
 //            drawScope = this,
@@ -200,18 +215,18 @@ fun Chart(
 //            canvasSize = size,
 //            width = axisWidth,
 //            axisWidthSecondary = axisWidthSecondary,
-//            maxPoints = chartData.size
+//            maxYValue = chartData.maxOf { it.y }
 //        )
-
+        val offsets = chartData.map {
+            it.toOffset(
+                canvasSize = size,
+                maxXCount = chartData.size,
+                maxYValue = chartData.maxOf { it.y }
+            )
+        }
         val path = Path().apply {
             reset()
-            val offsets = chartData.map {
-                it.toOffset(
-                    canvasSize = size,
-                    maxXCount = chartData.size,
-                    maxYValue = chartData.maxOf { it.y }
-                )
-            }
+
             val initial = offsets.first()
             Timber.d("ELEOLO initial $initial")
             moveTo(initial.x, initial.y)
@@ -270,6 +285,20 @@ fun Chart(
             ),
         )
 
+        selectionPosition.value?.let { selection ->
+            val pointOnChart = offsets.minBy { abs(it.x - selection.x) }
+            drawCircle(
+                color = selectionColor,
+                radius = selectionCircleRadius,
+                center = pointOnChart
+            )
+            drawLine(
+                color = selectionColor.withAlpha(0.3f),
+                strokeWidth = selectionLineWidth,
+                start = pointOnChart.copy(y = 0f),
+                end = pointOnChart.copy(y = size.height)
+            )
+        }
 
 //        chartData.take(numberOfVisiblePoints).forEachIndexed { index, chartPoint ->
 
@@ -295,9 +324,9 @@ private fun drawXAxis(
     axisWidth: Float,
     axisWidthSecondary: Float,
     canvasSize: Size,
-    maxYValue: Float
+    maxXValue: Float
 ) {
-    val oneUnitSize = canvasSize.width / maxYValue
+    val oneUnitSize = canvasSize.width / maxXValue
     drawScope.drawLine(
         color = color,
         start = Offset(x = 0f, y = canvasSize.height),
@@ -306,7 +335,7 @@ private fun drawXAxis(
         cap = StrokeCap.Round
     )
 
-    val xRange = (1..maxYValue.toInt()).toList()
+    val xRange = (1..maxXValue.toInt()).toList()
     xRange.forEachIndexed { index, i ->
         drawScope.drawLine(
             color = colorSecondary,
@@ -330,10 +359,9 @@ private fun drawYAxis(
     width: Float,
     axisWidthSecondary: Float,
     canvasSize: Size,
-    maxPoints: Int
+    maxYValue: Float
 ) {
-    val divideValue = maxPoints - 1
-    val oneUnitSize = canvasSize.height / divideValue
+    val oneUnitSize = canvasSize.height / maxYValue
 
     drawScope.drawLine(
         color = color,
@@ -343,7 +371,7 @@ private fun drawYAxis(
         cap = StrokeCap.Round
     )
 
-    val yRange = (1 until maxPoints).toList()
+    val yRange = (1 until maxYValue.toInt()).toList()
     yRange.forEachIndexed { index, i ->
         drawScope.drawLine(
             color = colorSecondary,
