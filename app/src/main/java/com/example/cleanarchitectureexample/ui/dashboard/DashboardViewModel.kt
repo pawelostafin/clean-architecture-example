@@ -38,6 +38,10 @@ class DashboardViewModel(
         }
     }
 
+    fun goToDetailsButtonClicked() {
+        _navigation.trySend(Navigation.Details)
+    }
+
     fun backButtonClicked() {
         _navigation.trySend(Navigation.Back)
     }
@@ -49,6 +53,7 @@ class DashboardViewModel(
     sealed class Navigation {
         object Back : Navigation()
         object Profile : Navigation()
+        object Details : Navigation()
     }
 
 }

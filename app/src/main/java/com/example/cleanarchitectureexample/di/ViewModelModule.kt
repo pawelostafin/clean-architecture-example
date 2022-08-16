@@ -1,6 +1,7 @@
 package com.example.cleanarchitectureexample.di
 
 import com.example.cleanarchitectureexample.ui.dashboard.DashboardViewModel
+import com.example.cleanarchitectureexample.ui.details.DetailsViewModel
 import com.example.cleanarchitectureexample.ui.login.LoginViewModel
 import com.example.cleanarchitectureexample.ui.main.MainViewModel
 import com.example.cleanarchitectureexample.ui.profile.ProfileViewModel
@@ -50,6 +51,10 @@ val viewModelModule = module {
             observeDarkThemeModeUseCase = get(),
             setDarkThemeModeUseCase = get()
         )
+    }
+
+    viewModel {
+        DetailsViewModel()
     }
 
 }

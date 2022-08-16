@@ -30,5 +30,9 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.cleanarchitectureexample.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.cleanarchitectureexample.ui.details.DetailsFragment"
+        android:label="DetailsFragment" />
 
 </navigation>

@@ -20,16 +20,19 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
@@ -41,29 +44,26 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
     val darkThemeMode by viewModel.darkThemeMode.collectAsState()
     val darkThemeModeDropdownVisibility by viewModel.darkThemeModeDropdownVisibility.collectAsState()
 
-    ConstraintLayout(
-        modifier = Modifier
-            .background(AppTheme.colors.backgroundPrimary)
-    ) {
-        val (closeButton, settingsColumn) = createRefs()
+    val backButtonId = remember { "backButtonId" }
+    val settingsColumnId = remember { "settingsColumnId" }
+    val constraints = remember {
+        createConstraints(
+            backButtonId = backButtonId,
+            settingsColumnId = settingsColumnId
+        )
+    }
 
+    ConstraintLayout(
+        modifier = Modifier.background(AppTheme.colors.backgroundPrimary),
+        constraintSet = constraints
+    ) {
         BackButton(
-            modifier = Modifier
-                .constrainAs(closeButton) {
-                    top.linkTo(parent.top, 8.dp)
-                    start.linkTo(parent.start, 8.dp)
-                },
+            modifier = Modifier.layoutId(backButtonId),
             onClick = { viewModel.backButtonClicked() }
         )
 
         Column(
-            Modifier
-                .constrainAs(settingsColumn) {
-                    top.linkTo(closeButton.bottom, 24.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                },
+            modifier = Modifier.layoutId(settingsColumnId),
         ) {
             DarkModeSettingsItem(
                 mode = darkThemeMode,
@@ -73,7 +73,27 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                 onModeChangeRequest = viewModel::darkThemeModeChangeRequested
             )
         }
+    }
+}
 
+private fun createConstraints(
+    backButtonId: String,
+    settingsColumnId: String
+): ConstraintSet {
+    return ConstraintSet {
+        val backButton = createRefFor(backButtonId)
+        val settingsColumn = createRefFor(settingsColumnId)
+
+        constrain(settingsColumn) {
+            top.linkTo(backButton.bottom, 24.dp)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            width = Dimension.fillToConstraints
+        }
+        constrain(backButton) {
+            top.linkTo(parent.top, 8.dp)
+            start.linkTo(parent.start, 8.dp)
+        }
     }
 }
 

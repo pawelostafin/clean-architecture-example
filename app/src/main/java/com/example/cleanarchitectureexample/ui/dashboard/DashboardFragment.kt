@@ -25,6 +25,7 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
         when (navigation) {
             DashboardViewModel.Navigation.Back -> navigateBack()
             DashboardViewModel.Navigation.Profile -> navigateToProfile()
+            DashboardViewModel.Navigation.Details -> navigateToDetails()
         }
     }
 
@@ -36,6 +37,13 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
         navigate(
             fragmentResId = R.id.profileFragment,
             transition = NavTransition.BOTTOM
+        )
+    }
+
+    private fun navigateToDetails(){
+        navigate(
+            fragmentResId = R.id.detailsFragment,
+            transition = NavTransition.RIGHT
         )
     }
 

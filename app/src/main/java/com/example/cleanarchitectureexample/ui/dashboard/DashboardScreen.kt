@@ -16,12 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import coil.compose.AsyncImage
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
+import com.example.cleanarchitectureexample.ui.utli.button.CustomButton
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
 
@@ -29,23 +32,55 @@ import com.example.cleanarchitectureexample.ui.utli.withAlpha
 fun DashboardScreen(viewModel: DashboardViewModel) {
     val profileButtonState by viewModel.profileButtonState.collectAsState()
 
+    val profileButtonId = remember { "profileButton" }
+    val detailsButtonId = remember { "detailsButton" }
+    val constraints = remember {
+        createConstraints(
+            profileButtonId = profileButtonId,
+            detailsButtonId = detailsButtonId
+        )
+    }
+
     ConstraintLayout(
+        constraintSet = constraints,
         modifier = Modifier
             .background(color = AppTheme.colors.backgroundPrimary)
     ) {
-        val (profileButton) = createRefs()
-
         ProfileButton(
             state = profileButtonState,
             onClick = viewModel::profileButtonClicked,
             modifier = Modifier
-                .constrainAs(profileButton) {
-                    top.linkTo(anchor = parent.top, margin = 16.dp)
-                    end.linkTo(anchor = parent.end, margin = 16.dp)
-                }
+                .layoutId(profileButtonId)
+        )
+        CustomButton(
+            text = "Go to details",
+            onClick = viewModel::goToDetailsButtonClicked,
+            modifier = Modifier
+                .layoutId(detailsButtonId)
         )
     }
 
+}
+
+private fun createConstraints(
+    profileButtonId: String,
+    detailsButtonId: String
+): ConstraintSet {
+    return ConstraintSet {
+        val profileButton = createRefFor(profileButtonId)
+        val detailsButton = createRefFor(detailsButtonId)
+
+        constrain(profileButton) {
+            top.linkTo(parent.top)
+            end.linkTo(parent.end)
+        }
+        constrain(detailsButton) {
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+    }
 }
 
 @Composable
