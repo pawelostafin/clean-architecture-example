@@ -1,12 +1,12 @@
 package com.example.cleanarchitectureexample.ui.dashboard
 
 import androidx.compose.runtime.Composable
-import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.navigation.NavTransition
 import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
 import com.example.cleanarchitectureexample.ui.base.observe
+import com.example.cleanarchitectureexample.ui.main.MainGraphRoutes
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
@@ -35,14 +35,14 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
 
     private fun navigateToProfile() {
         navigate(
-            fragmentResId = R.id.profileFragment,
+            route = MainGraphRoutes.Profile,
             transition = NavTransition.BOTTOM
         )
     }
 
-    private fun navigateToDetails(){
+    private fun navigateToDetails() {
         navigate(
-            fragmentResId = R.id.detailsFragment,
+            route = MainGraphRoutes.Details,
             transition = NavTransition.RIGHT
         )
     }

@@ -1,16 +1,16 @@
 package com.example.cleanarchitectureexample.navigation
 
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.main.NavRoute
 
 
-fun Fragment.navigate(
-    @IdRes fragmentResId: Int,
-    @IdRes popUpTo: Int? = null,
+fun <T : NavRoute> Fragment.navigate(
+    route: T,
+    popUpToRoute: T? = null,
     inclusive: Boolean = false,
     transition: NavTransition = NavTransition.RIGHT
 ) {
@@ -20,15 +20,17 @@ fun Fragment.navigate(
             NavTransition.FADE -> applyTransitionFade()
             NavTransition.BOTTOM -> applyTransitionBottom()
         }
-        popUpTo?.let {
-            popUpTo(it) {
-                this.inclusive = inclusive
-            }
+        popUpToRoute?.let {
+            popUpTo(
+                route = it.raw,
+                popUpToBuilder = {
+                    this.inclusive = inclusive
+                }
+            )
         }
     }
     findNavController().navigate(
-        resId = fragmentResId,
-        args = null,
+        route = route.raw,
         navOptions = navOptions
     )
 }

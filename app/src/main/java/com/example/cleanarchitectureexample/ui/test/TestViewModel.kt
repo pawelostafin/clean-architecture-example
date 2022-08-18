@@ -30,7 +30,7 @@ class TestViewModel : BaseViewModel() {
     }
 
     fun navigateButtonClicked() {
-        _navigation.trySend(Navigation.Next)
+        _navigation.trySend(Navigation.Test)
     }
 
     fun changeBackgroundButtonClicked() {
@@ -48,7 +48,7 @@ class TestViewModel : BaseViewModel() {
 
     sealed class Navigation {
         object Back : Navigation()
-        object Next : Navigation()
+        object Test : Navigation()
     }
 
 }

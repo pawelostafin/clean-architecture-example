@@ -18,11 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.navigation.navigate
 import com.example.cleanarchitectureexample.navigation.navigateBack
 import com.example.cleanarchitectureexample.ui.base.BaseComposeFragment
 import com.example.cleanarchitectureexample.ui.base.observe
+import com.example.cleanarchitectureexample.ui.main.MainGraphRoutes
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TestFragment : BaseComposeFragment<TestViewModel>() {
@@ -81,7 +81,7 @@ class TestFragment : BaseComposeFragment<TestViewModel>() {
     private fun handleNavigation(navigation: TestViewModel.Navigation) {
         when (navigation) {
             TestViewModel.Navigation.Back -> navigateBack()
-            TestViewModel.Navigation.Next -> navigate(fragmentResId = R.id.testFragment)
+            TestViewModel.Navigation.Test -> navigate(route = MainGraphRoutes.Test)
         }
     }
 
