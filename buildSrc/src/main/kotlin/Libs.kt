@@ -18,6 +18,14 @@ object Libs {
     const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:" + Versions.lifecycle
     const val preference = "androidx.preference:preference:" + Versions.preference
 
+    const val retrofit = "com.squareup.retrofit2:retrofit:" + Versions.retrofit
+    const val retrofitConverterMoshi = "com.squareup.retrofit2:converter-moshi:" + Versions.retrofit
+    const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:" + Versions.okhttp
+    const val okhttp = "com.squareup.okhttp3:okhttp:" + Versions.okhttp
+
+    const val moshi = "com.squareup.moshi:moshi:" + Versions.moshi
+    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:" + Versions.moshi
+
     const val timber = "com.jakewharton.timber:timber:" + Versions.timber
 
     const val koin = "io.insert-koin:koin-android:" + Versions.koin

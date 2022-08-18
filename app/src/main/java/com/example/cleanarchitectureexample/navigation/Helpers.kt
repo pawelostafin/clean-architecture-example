@@ -5,14 +5,13 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.example.cleanarchitectureexample.R
-import com.example.cleanarchitectureexample.ui.main.NavRoute
 
 
-fun <T : NavRoute> Fragment.navigate(
-    route: T,
-    popUpToRoute: T? = null,
+fun Fragment.navigate(
+    route: String,
+    popUpToRoute: String? = null,
     inclusive: Boolean = false,
-    transition: NavTransition = NavTransition.RIGHT
+    transition: NavTransition = NavTransition.RIGHT,
 ) {
     val navOptions = navOptions {
         when (transition) {
@@ -22,7 +21,7 @@ fun <T : NavRoute> Fragment.navigate(
         }
         popUpToRoute?.let {
             popUpTo(
-                route = it.raw,
+                route = it,
                 popUpToBuilder = {
                     this.inclusive = inclusive
                 }
@@ -30,7 +29,7 @@ fun <T : NavRoute> Fragment.navigate(
         }
     }
     findNavController().navigate(
-        route = route.raw,
+        route = route,
         navOptions = navOptions
     )
 }

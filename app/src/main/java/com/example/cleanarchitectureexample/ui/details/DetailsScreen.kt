@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -37,6 +39,8 @@ import kotlin.math.abs
 
 @Composable
 fun DetailsScreen(viewModel: DetailsViewModel) {
+    val name by viewModel.name.collectAsState()
+    val chartData by viewModel.chartData.collectAsState()
 
     val backButtonId = remember { "backButtonId" }
     val chartId = remember { "chartId" }
@@ -61,11 +65,11 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
         )
         Chart(
             modifier = Modifier.layoutId(chartId),
-            chartData = remember { createChartData() }
+            chartData = chartData
         )
         Text(
             modifier = Modifier.layoutId(pairNameId),
-            text = "Bitcoin (BTC)",
+            text = name,
             fontSize = 32.sp,
             color = AppTheme.colors.textColorPrimary
         )
@@ -158,7 +162,13 @@ fun Chart(
     val lineWidth = 3.dp.pxValue
     val axisWidth = 2.dp.pxValue
     val axisWidthSecondary = 1.dp.pxValue
-    val chartColor = Color(red = 255, green = 69, blue = 58)
+    val chartColor = remember(chartData) {
+        if (chartData.first().y > chartData.last().y) {
+            Color(red = 255, green = 69, blue = 58)
+        } else {
+            Color.Green
+        }
+    }
     val selectionCircleRadius = 6.dp.pxValue
     val selectionLineWidth = 2.dp.pxValue
     val selectionColor = AppTheme.colors.primary
@@ -221,14 +231,14 @@ fun Chart(
             it.toOffset(
                 canvasSize = size,
                 maxXCount = chartData.size,
-                maxYValue = chartData.maxOf { it.y }
+                maxYValue = chartData.maxOf { it.y },
+                minYValue = chartData.minOf { it.y },
             )
         }
         val path = Path().apply {
             reset()
 
             val initial = offsets.first()
-            Timber.d("ELEOLO initial $initial")
             moveTo(initial.x, initial.y)
             offsets.forEachIndexed { index, value ->
                 if (index > 0) {
@@ -237,9 +247,6 @@ fun Chart(
                     val deltaX = value.x - previous.x
                     val curveXOffset = deltaX * easing
 
-                    Timber.d("ELOELO index = $index")
-                    Timber.d("ELOELO prev = $previous")
-                    Timber.d("ELOELO current = $value")
                     cubicTo(
                         x1 = previous.x + curveXOffset,
                         y1 = previous.y,
@@ -267,6 +274,7 @@ fun Chart(
             drawPath(
                 path = path.apply {
                     lineTo(size.width, size.height)
+                    lineTo(0f, size.height)
                     path.close()
                 },
                 brush = Brush.verticalGradient(
@@ -397,10 +405,13 @@ data class ChartPoint(
 fun ChartPoint.toOffset(
     canvasSize: Size,
     maxXCount: Int,
-    maxYValue: Float
+    maxYValue: Float,
+    minYValue: Float
 ): Offset {
     val normalizedX = x * (canvasSize.width / (maxXCount - 1).toFloat())
-    val normalizedY = canvasSize.height - (y * (canvasSize.height / maxYValue))
+
+    val heightOfOneUnit = (canvasSize.height / (maxYValue - minYValue))
+    val normalizedY = canvasSize.height - ((y - minYValue) * heightOfOneUnit)
 
     return Offset(
         x = normalizedX,

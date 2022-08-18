@@ -25,7 +25,7 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
         when (navigation) {
             DashboardViewModel.Navigation.Back -> navigateBack()
             DashboardViewModel.Navigation.Profile -> navigateToProfile()
-            DashboardViewModel.Navigation.Details -> navigateToDetails()
+            is DashboardViewModel.Navigation.Details -> navigateToDetails(navigation)
         }
     }
 
@@ -35,15 +35,17 @@ class DashboardFragment : BaseComposeFragment<DashboardViewModel>() {
 
     private fun navigateToProfile() {
         navigate(
-            route = MainGraphRoutes.Profile,
+            route = MainGraphRoutes.Profile.navigationRoute,
             transition = NavTransition.BOTTOM
         )
     }
 
-    private fun navigateToDetails() {
+    private fun navigateToDetails(navigation: DashboardViewModel.Navigation.Details) {
         navigate(
-            route = MainGraphRoutes.Details,
-            transition = NavTransition.RIGHT
+            route = MainGraphRoutes.Details.buildFullNavigationRoute(
+                currencyId = navigation.currencyId
+            ),
+            transition = NavTransition.RIGHT,
         )
     }
 

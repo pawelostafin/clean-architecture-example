@@ -58,12 +58,4 @@ dependencies {
 
     debugImplementation(Libs.Debug.composeUiTooling)
     debugImplementation(Libs.Debug.composeUiTestManifest)
-
-    // For apps targeting Android 12, add WorkManager dependency.
-    constraints {
-        implementation("androidx.work:work-runtime:${Versions.workRuntime}") {
-            because("androidx.work:work-runtime:${Versions.workRuntime} pulled from play-services-ads has a bug ...")
-        }
-    }
-
 }

@@ -35,16 +35,16 @@ class SplashFragment : BaseComposeFragment<SplashViewModel>() {
 
     private fun navigateToDashboard() {
         navigate(
-            route = MainGraphRoutes.Dashboard,
-            popUpToRoute = MainGraphRoutes.Root,
+            route = MainGraphRoutes.Dashboard.navigationRoute,
+            popUpToRoute = MainGraphRoutes.Root.navigationRoute,
             transition = NavTransition.FADE
         )
     }
 
     private fun navigateToLogin() {
         navigate(
-            route = MainGraphRoutes.Login,
-            popUpToRoute = MainGraphRoutes.Root,
+            route = MainGraphRoutes.Login.navigationRoute,
+            popUpToRoute = MainGraphRoutes.Root.navigationRoute,
             transition = NavTransition.FADE
         )
     }

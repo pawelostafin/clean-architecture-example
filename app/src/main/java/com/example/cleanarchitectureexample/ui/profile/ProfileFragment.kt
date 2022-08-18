@@ -35,15 +35,15 @@ class ProfileFragment : BaseComposeFragment<ProfileViewModel>() {
 
     private fun navigateToLogin() {
         navigate(
-            route = MainGraphRoutes.Login,
-            popUpToRoute = MainGraphRoutes.Root,
+            route = MainGraphRoutes.Login.navigationRoute,
+            popUpToRoute = MainGraphRoutes.Root.navigationRoute,
             transition = NavTransition.FADE
         )
     }
 
     private fun navigateToSettings() {
         navigate(
-            route = MainGraphRoutes.Settings,
+            route = MainGraphRoutes.Settings.navigationRoute,
             transition = NavTransition.RIGHT
         )
     }

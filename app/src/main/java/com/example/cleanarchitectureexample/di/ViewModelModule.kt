@@ -29,7 +29,8 @@ val viewModelModule = module {
 
     viewModel {
         DashboardViewModel(
-            getUserDetailsUseCase = get()
+            getUserDetailsUseCase = get(),
+            observeMarketsUseCase = get()
         )
     }
 
@@ -53,8 +54,11 @@ val viewModelModule = module {
         )
     }
 
-    viewModel {
-        DetailsViewModel()
+    viewModel { (currencyId: String) ->
+        DetailsViewModel(
+            currencyId = currencyId,
+            getMarketChartDataUseCase = get()
+        )
     }
 
 }

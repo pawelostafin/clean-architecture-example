@@ -1,9 +1,11 @@
 package com.example.data.repository.di
 
 import com.example.data.repository.AuthRepositoryImpl
+import com.example.data.repository.MarketRepositoryImpl
 import com.example.data.repository.SettingsRepositoryImpl
 import com.example.data.repository.UserDetailsRepositoryImpl
 import com.example.domain.repository.AuthRepository
+import com.example.domain.repository.MarketRepository
 import com.example.domain.repository.SettingsRepository
 import com.example.domain.repository.UserDetailsRepository
 import org.koin.dsl.module
@@ -27,6 +29,13 @@ val repositoryModule = module {
     single<SettingsRepository> {
         SettingsRepositoryImpl(
             sharedPreferences = get()
+        )
+    }
+
+
+    single<MarketRepository> {
+        MarketRepositoryImpl(
+            marketService = get()
         )
     }
 

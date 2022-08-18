@@ -81,7 +81,7 @@ class TestFragment : BaseComposeFragment<TestViewModel>() {
     private fun handleNavigation(navigation: TestViewModel.Navigation) {
         when (navigation) {
             TestViewModel.Navigation.Back -> navigateBack()
-            TestViewModel.Navigation.Test -> navigate(route = MainGraphRoutes.Test)
+            TestViewModel.Navigation.Test -> navigate(route = MainGraphRoutes.Test.navigationRoute)
         }
     }
 

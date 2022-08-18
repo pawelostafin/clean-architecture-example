@@ -55,18 +55,18 @@ dependencies {
     testImplementation(Libs.Test.mockkAgentJvm)
     testImplementation(Libs.Test.coroutinesTest)
 
+    implementation(Libs.retrofit)
+    implementation(Libs.retrofitConverterMoshi)
+    implementation(Libs.okhttpLoggingInterceptor)
+    implementation(Libs.okhttp)
+
+    implementation(Libs.moshi)
+    kapt(Libs.moshiCodegen)
+
     testImplementation(Libs.Test.junit)
     androidTestImplementation(Libs.Test.junit)
     androidTestImplementation(Libs.Test.composeUiTestJunit4)
 
     debugImplementation(Libs.Debug.composeUiTooling)
     debugImplementation(Libs.Debug.composeUiTestManifest)
-
-    // For apps targeting Android 12, add WorkManager dependency.
-    constraints {
-        implementation("androidx.work:work-runtime:${Versions.workRuntime}") {
-            because("androidx.work:work-runtime:${Versions.workRuntime} pulled from play-services-ads has a bug ...")
-        }
-    }
-
 }

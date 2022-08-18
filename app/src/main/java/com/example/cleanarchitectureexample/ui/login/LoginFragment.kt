@@ -34,8 +34,8 @@ class LoginFragment : BaseComposeFragment<LoginViewModel>() {
 
     private fun navigateToDashboard() {
         navigate(
-            route = MainGraphRoutes.Dashboard,
-            popUpToRoute = MainGraphRoutes.Root,
+            route = MainGraphRoutes.Dashboard.navigationRoute,
+            popUpToRoute = MainGraphRoutes.Root.navigationRoute,
             transition = NavTransition.FADE
         )
     }
