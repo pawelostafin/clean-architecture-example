@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -69,7 +68,10 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             modifier = Modifier
                 .layoutId(marketListId)
         ) {
-            items(items ?: emptyList()) {
+            items(
+                items = items ?: emptyList(),
+                key = { it.id }
+            ) {
                 MarketCell(
                     item = it,
                     onClick = viewModel::itemClicked

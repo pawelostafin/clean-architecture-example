@@ -159,7 +159,7 @@ fun Chart(
     val axisColorSecondary = Color.Gray.withAlpha(0.2f)
 
     val oneUnitSize = 20.dp.pxValue
-    val lineWidth = 3.dp.pxValue
+    val lineWidth = 1.dp.pxValue
     val axisWidth = 2.dp.pxValue
     val axisWidthSecondary = 1.dp.pxValue
     val chartColor = remember(chartData) {
