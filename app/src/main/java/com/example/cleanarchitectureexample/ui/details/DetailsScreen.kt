@@ -185,7 +185,7 @@ fun Chart(
             animationSpec = tween(
                 easing = CubicBezierEasing(0.5f, 0f, 0.5f, 1f),
                 durationMillis = 1000,
-                delayMillis = 400
+                delayMillis = 600
             ),
         )
         drawBackground.value = true

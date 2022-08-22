@@ -13,12 +13,16 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -81,6 +85,7 @@ dependencies {
     implementation(Libs.coreKtx)
     implementation(Libs.lifecycleRuntimeKtx)
     implementation(Libs.lifecycleViewModelKtx)
+    implementation("androidx.recyclerview:recyclerview:1.3.0-beta02")
 
     implementation(Libs.timber)
 

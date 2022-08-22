@@ -1,11 +1,14 @@
 package com.example.cleanarchitectureexample.ui.dashboard
 
+import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -24,16 +27,69 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import coil.compose.AsyncImage
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
+
+object Diff : DiffUtil.ItemCallback<MarketItem>() {
+
+    override fun areItemsTheSame(oldItem: MarketItem, newItem: MarketItem): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: MarketItem, newItem: MarketItem): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+class EloAdapter(
+    private val onItemClick: (MarketItem) -> Unit
+) : ListAdapter<MarketItem, RecyclerView.ViewHolder>(Diff) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return MarketViewHolder(
+            composeView = ComposeView(parent.context),
+            onItemClick = onItemClick
+        )
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        (holder as MarketViewHolder).bind(getItem(position))
+    }
+
+}
+
+class MarketViewHolder(
+    private val composeView: ComposeView,
+    private val onItemClick: (MarketItem) -> Unit
+) : RecyclerView.ViewHolder(composeView) {
+
+//    private var itemState by mutableStateOf<MarketItem?>(null)
+
+    fun bind(item: MarketItem) {
+        composeView.setContent {
+            MarketCell(
+                item = item,
+                onClick = onItemClick
+            )
+        }
+    }
+}
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
@@ -64,6 +120,20 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             )
         }
 
+//        AndroidView(
+//            modifier = Modifier
+//                .layoutId(marketListId),
+//            factory = {
+//                RecyclerView(it).apply {
+//                    layoutManager = LinearLayoutManager(it)
+//                    adapter = EloAdapter(onItemClick = viewModel::itemClicked)
+//                    (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+//                    setHasFixedSize(true)
+//                }
+//            }
+//        ) {
+//            (it.adapter as EloAdapter).submitList(items)
+//        }
         LazyColumn(
             modifier = Modifier
                 .layoutId(marketListId)
@@ -98,6 +168,7 @@ private fun MarketCell(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(IntrinsicSize.Min)
                 .clickableWithRipple { onClick.invoke(item) }
                 .padding(
                     start = 24.dp,
@@ -108,19 +179,17 @@ private fun MarketCell(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CurrencyImage(
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.requiredSize(32.dp),
                 url = item.imageUrl
             )
             Spacer(modifier = Modifier.width(16.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    modifier = Modifier.weight(1f),
                     text = item.name,
                     color = AppTheme.colors.textColorPrimary,
                     fontSize = 18.sp
                 )
                 Text(
-                    modifier = Modifier.weight(3f),
                     text = item.price.toPlainString(),
                     color = AppTheme.colors.textColorSecondary,
                     fontSize = 18.sp
