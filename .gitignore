@@ -66,7 +66,9 @@ captures/
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
- google-services.json
+google-services.json
+
+output-metadata.json
 
 # Android Patch
 gen-external-apklibs
