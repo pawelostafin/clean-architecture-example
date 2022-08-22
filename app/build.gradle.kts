@@ -21,6 +21,15 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "test"
+            keyPassword = "test123"
+            storeFile = file("keys/test_key.jks")
+            storePassword = "test123"
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
