@@ -55,10 +55,11 @@ platform :android do
   end
 
   lane :getIncrementedVersionCodeFromFirebase do
-    latest_release = firebase_app_distribution_get_latest_release(
-      app: appId
-    )
-    latest_release[:buildVersion].to_i + 1
+#     latest_release = firebase_app_distribution_get_latest_release(
+#       app: appId
+#     )
+#     latest_release[:buildVersion].to_i + 1
+    1
   end
 
 end
