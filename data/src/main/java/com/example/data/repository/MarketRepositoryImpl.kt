@@ -50,6 +50,10 @@ class MarketRepositoryImpl(
         }
     }
 
+    override suspend fun getMarket(currencyId: String): Market {
+        return _markets.value!!.first { it.id == currencyId }
+    }
+
     private fun startPeriodicCalls(baseCurrencyCode: CurrencyCode) {
         GlobalScope.launch {
             while (true) {

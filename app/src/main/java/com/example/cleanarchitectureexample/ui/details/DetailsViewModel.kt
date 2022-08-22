@@ -4,50 +4,50 @@ import com.example.cleanarchitectureexample.ui.base.BaseViewModel
 import com.example.cleanarchitectureexample.ui.base.EventChannel
 import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
-import com.example.domain.model.CurrencyCode
+import com.example.domain.model.ChartData
 import com.example.domain.usecase.GetMarketChartDataUseCase
+import com.example.domain.usecase.GetMarketUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 
 class DetailsViewModel(
     private val currencyId: String,
-    private val getMarketChartDataUseCase: GetMarketChartDataUseCase
+    private val getMarketChartDataUseCase: GetMarketChartDataUseCase,
+    private val getMarketUseCase: GetMarketUseCase
 ) : BaseViewModel() {
 
     private val _navigation = EventChannel<Navigation>()
     val navigation = _navigation.asFlow()
 
-    private val _name = MutableStateFlow("")
-    val name = _name.asStateFlow()
+    private val _marketInfo = MutableStateFlow<MarketInfo?>(null)
+    val marketInfo = _marketInfo.asStateFlow()
 
-    private val _chartData = MutableStateFlow(listOf(ChartPoint(0f, 0f),ChartPoint(0f, 0f)))
+    private val _chartData = MutableStateFlow<ChartData?>(null)
     val chartData = _chartData.asStateFlow()
 
     init {
-        _name.value = currencyId
-
-        viewModelLaunch {
-            val data = getMarketChartDataUseCase.execute(
-                currencyId = currencyId,
-                baseCurrency = CurrencyCode.Pln
-            )
-
-            val max = data.maxBy { it.price }.price
-            val min = data.minBy { it.price }.price
-            _chartData.value = data.mapIndexed { index, marketChartPrice ->
-                ChartPoint(
-                    x = index.toFloat(),
-                    y = (marketChartPrice.price - min).toFloat()
-                )
-            }.onEach {
-                Timber.d("ELOELO $it $min $max diff: ${max - min}}")
-            }
-        }
+        getMarketInfo()
+        getMarketChartData()
     }
 
     fun backButtonClicked() {
         _navigation.trySend(Navigation.Back)
+    }
+
+    private fun getMarketInfo() {
+        viewModelLaunch {
+            val market = getMarketUseCase.execute(currencyId = currencyId)
+            _marketInfo.value = MarketInfo(name = market.name)
+        }
+    }
+
+    private fun getMarketChartData() {
+        viewModelLaunch {
+            _chartData.value = getMarketChartDataUseCase.execute(currencyId = currencyId).also {
+                Timber.d("ELOELO $it")
+            }
+        }
     }
 
     sealed class Navigation {
@@ -55,3 +55,7 @@ class DetailsViewModel(
     }
 
 }
+
+data class MarketInfo(
+    val name: String
+)

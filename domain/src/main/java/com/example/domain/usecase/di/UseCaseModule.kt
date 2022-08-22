@@ -1,6 +1,7 @@
 package com.example.domain.usecase.di
 
 import com.example.domain.usecase.GetMarketChartDataUseCase
+import com.example.domain.usecase.GetMarketUseCase
 import com.example.domain.usecase.GetUserDetailsUseCase
 import com.example.domain.usecase.IsUserLoggedInUseCase
 import com.example.domain.usecase.LoginUseCase
@@ -56,6 +57,12 @@ val useCaseModule = module {
 
     factory {
         GetMarketChartDataUseCase(
+            marketRepository = get()
+        )
+    }
+
+    factory {
+        GetMarketUseCase(
             marketRepository = get()
         )
     }

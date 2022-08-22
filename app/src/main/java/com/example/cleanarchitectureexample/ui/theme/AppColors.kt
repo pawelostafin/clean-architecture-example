@@ -13,7 +13,10 @@ class AppColors(
 
     val dropdownBackground: Color,
     val dialogButton: Color,
-    val profileImageBorder: Color
+    val profileImageBorder: Color,
+
+    val chartGreen: Color,
+    val chartRed: Color
 )
 
 // TODO: change to light colors palette
@@ -30,7 +33,9 @@ fun lightColors(): AppColors {
         backgroundSecondary = Color(0xFFE8E8E8),
         dropdownBackground = backgroundPrimary,
         dialogButton = textColorPrimary,
-        profileImageBorder =  Color(0xFF838383)
+        profileImageBorder = Color(0xFF838383),
+        chartGreen = Color.Green,
+        chartRed = Color(red = 255, green = 69, blue = 58)
     )
 }
 
@@ -48,6 +53,8 @@ fun darkColors(): AppColors {
         backgroundSecondary = backgroundSecondary,
         dropdownBackground = backgroundSecondary,
         dialogButton = primary,
-        profileImageBorder = textColorPrimary
+        profileImageBorder = textColorPrimary,
+        chartGreen = Color.Green,
+        chartRed = Color(red = 255, green = 69, blue = 58)
     )
 }

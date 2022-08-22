@@ -14,4 +14,6 @@ interface MarketRepository {
         baseCurrency: CurrencyCode
     ): List<MarketChartPrice>
 
+    suspend fun getMarket(currencyId: String): Market
+
 }

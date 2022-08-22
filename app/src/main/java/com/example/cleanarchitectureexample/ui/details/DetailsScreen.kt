@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
@@ -32,14 +31,13 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.example.cleanarchitectureexample.ui.settings.BackButton
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
-import com.example.cleanarchitectureexample.ui.utli.button.gestureRecognizer
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
-import timber.log.Timber
-import kotlin.math.abs
+import com.example.domain.model.ChartData
+import com.example.domain.model.ChartPoint
 
 @Composable
 fun DetailsScreen(viewModel: DetailsViewModel) {
-    val name by viewModel.name.collectAsState()
+    val marketInfo by viewModel.marketInfo.collectAsState()
     val chartData by viewModel.chartData.collectAsState()
 
     val backButtonId = remember { "backButtonId" }
@@ -63,58 +61,21 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
             modifier = Modifier.layoutId(backButtonId),
             onClick = { viewModel.backButtonClicked() }
         )
-        Chart(
-            modifier = Modifier.layoutId(chartId),
-            chartData = chartData
-        )
-        Text(
-            modifier = Modifier.layoutId(pairNameId),
-            text = name,
-            fontSize = 32.sp,
-            color = AppTheme.colors.textColorPrimary
-        )
+        chartData?.let {
+            Chart(
+                modifier = Modifier.layoutId(chartId),
+                chartData = it
+            )
+        }
+        marketInfo?.let {
+            Text(
+                modifier = Modifier.layoutId(pairNameId),
+                text = it.name,
+                fontSize = 32.sp,
+                color = AppTheme.colors.textColorPrimary
+            )
+        }
     }
-}
-
-private fun createChartData(): List<ChartPoint> {
-    return listOf(
-        ChartPoint(
-            x = 0f,
-            y = 0f
-        ),
-        ChartPoint(
-            x = 1f,
-            y = 5f
-        ),
-        ChartPoint(
-            x = 2f,
-            y = 4f
-        ),
-        ChartPoint(
-            x = 3f,
-            y = 15f
-        ),
-        ChartPoint(
-            x = 4f,
-            y = 6f
-        ),
-        ChartPoint(
-            x = 5f,
-            y = 9f
-        ),
-        ChartPoint(
-            x = 6f,
-            y = 12f
-        ),
-        ChartPoint(
-            x = 7f,
-            y = 14f
-        ),
-        ChartPoint(
-            x = 8f,
-            y = 11f
-        ),
-    )
 }
 
 private fun createConstraints(
@@ -150,259 +111,148 @@ private fun createConstraints(
 
 @Composable
 fun Chart(
-    chartData: List<ChartPoint>,
+    chartData: ChartData,
     modifier: Modifier = Modifier
 ) {
-    val initialOffset = remember { Offset.Zero }
-    val lineColor = Color.Red
-    val axisColor = Color.LightGray
-    val axisColorSecondary = Color.Gray.withAlpha(0.2f)
-
-    val oneUnitSize = 20.dp.pxValue
     val lineWidth = 1.dp.pxValue
-    val axisWidth = 2.dp.pxValue
-    val axisWidthSecondary = 1.dp.pxValue
-    val chartColor = remember(chartData) {
-        if (chartData.first().y > chartData.last().y) {
-            Color(red = 255, green = 69, blue = 58)
-        } else {
-            Color.Green
-        }
+    val chartColor = if (chartData.isUpInThisTimeFrame) {
+        AppTheme.colors.chartGreen
+    } else {
+        AppTheme.colors.chartRed
     }
-    val selectionCircleRadius = 6.dp.pxValue
-    val selectionLineWidth = 2.dp.pxValue
-    val selectionColor = AppTheme.colors.primary
-
-    val lineProgress = remember { Animatable(0f) }
+    val backgroundColor = remember(chartColor) { chartColor.withAlpha(0.3f) }
+    val animatedLinePercentage = remember { Animatable(0f) }
     val backgroundAlpha = remember { Animatable(0f) }
     val drawBackground = remember { mutableStateOf(false) }
+    val animationEasing = remember { CubicBezierEasing(0.5f, 0f, 0.5f, 1f) }
 
-    val easing = 0.5f
-
-    LaunchedEffect(lineProgress) {
-        lineProgress.animateTo(
+    LaunchedEffect(animatedLinePercentage) {
+        animatedLinePercentage.animateTo(
             targetValue = 1f,
             animationSpec = tween(
-                easing = CubicBezierEasing(0.5f, 0f, 0.5f, 1f),
+                easing = animationEasing,
                 durationMillis = 1000,
-                delayMillis = 600
+                delayMillis = 400
             ),
         )
         drawBackground.value = true
         backgroundAlpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(
-                easing = CubicBezierEasing(0.5f, 0f, 0.5f, 1f),
+                easing = animationEasing,
                 durationMillis = 1000,
             )
         )
     }
 
-    val selectionPosition = remember { mutableStateOf<Offset?>(null) }
-
-    Canvas(
-        modifier = modifier
-            .gestureRecognizer(
-                onClick = {
-                    selectionPosition.value = it
-                    Timber.d("ELOELO clicked $it")
-                }
-            )
-    ) {
-//        drawXAxis(
-//            drawScope = this,
-//            color = axisColor,
-//            colorSecondary = axisColorSecondary,
-//            canvasSize = size,
-//            axisWidth = axisWidth,
-//            axisWidthSecondary = axisWidthSecondary,
-//            maxXValue = chartData.maxOf { it.x }
-//        )
-//        drawYAxis(
-//            drawScope = this,
-//            color = axisColor,
-//            colorSecondary = axisColorSecondary,
-//            canvasSize = size,
-//            width = axisWidth,
-//            axisWidthSecondary = axisWidthSecondary,
-//            maxYValue = chartData.maxOf { it.y }
-//        )
-        val offsets = chartData.map {
-            it.toOffset(
-                canvasSize = size,
-                maxXCount = chartData.size,
-                maxYValue = chartData.maxOf { it.y },
-                minYValue = chartData.minOf { it.y },
-            )
-        }
-        val path = Path().apply {
-            reset()
-
-            val initial = offsets.first()
-            moveTo(initial.x, initial.y)
-            offsets.forEachIndexed { index, value ->
-                if (index > 0) {
-                    val previous = offsets.getOrNull(index - 1) ?: initial
-
-                    val deltaX = value.x - previous.x
-                    val curveXOffset = deltaX * easing
-
-                    cubicTo(
-                        x1 = previous.x + curveXOffset,
-                        y1 = previous.y,
-                        x2 = value.x - curveXOffset,
-                        y2 = value.y,
-                        x3 = value.x,
-                        y3 = value.y
-                    )
-                }
-            }
-        }
-
-
-        val animatedPath = Path()
-        PathMeasure().let {
-            it.setPath(path, false)
-            it.getSegment(
-                startDistance = 0f,
-                stopDistance = it.length * lineProgress.value,
-                destination = animatedPath
-            )
-        }
+    Canvas(modifier = modifier) {
+        val linePath = createLinePath(
+            chartData = chartData,
+            canvasSize = size
+        )
+        val backgroundPath = createBackgroundPath(
+            linePath = linePath,
+            canvasSize = size
+        )
+        val animatedLinePath = getLinePathPercent(
+            originalPath = linePath,
+            percent = animatedLinePercentage.value
+        )
 
         if (drawBackground.value) {
             drawPath(
-                path = path.apply {
-                    lineTo(size.width, size.height)
-                    lineTo(0f, size.height)
-                    path.close()
-                },
+                path = backgroundPath,
                 brush = Brush.verticalGradient(
-                    colors = listOf(chartColor.withAlpha(0.3f), Color.Transparent)
+                    colors = listOf(backgroundColor, Color.Transparent)
                 ),
                 alpha = backgroundAlpha.value
             )
         }
 
         drawPath(
-            path = animatedPath,
+            path = animatedLinePath,
             color = chartColor,
             style = Stroke(
                 width = lineWidth,
                 cap = StrokeCap.Round
-            ),
+            )
         )
+    }
+}
 
-        selectionPosition.value?.let { selection ->
-            val pointOnChart = offsets.minBy { abs(it.x - selection.x) }
-            drawCircle(
-                color = selectionColor,
-                radius = selectionCircleRadius,
-                center = pointOnChart
-            )
-            drawLine(
-                color = selectionColor.withAlpha(0.3f),
-                strokeWidth = selectionLineWidth,
-                start = pointOnChart.copy(y = 0f),
-                end = pointOnChart.copy(y = size.height)
-            )
+private fun createBackgroundPath(
+    linePath: Path,
+    canvasSize: Size
+): Path {
+    val outputPath = Path()
+    PathMeasure().let {
+        it.setPath(linePath, false)
+        it.getSegment(
+            startDistance = 0f,
+            stopDistance = it.length,
+            destination = outputPath
+        )
+    }
+    return outputPath.apply {
+        lineTo(x = canvasSize.width, y = canvasSize.height)
+        lineTo(x = 0f, y = canvasSize.height)
+        close()
+    }
+}
+
+private fun createLinePath(
+    chartData: ChartData,
+    canvasSize: Size
+): Path {
+    val offsets = chartData.points.map {
+        it.normalize(
+            canvasSize = canvasSize,
+            maxXCount = chartData.points.size,
+            maxYValue = chartData.maxY,
+            minYValue = chartData.minY,
+        )
+    }
+    return Path().apply {
+        val easing = 0.5f
+        val initial = offsets.first()
+        moveTo(initial.x, initial.y)
+        offsets.forEachIndexed { index, value ->
+            if (index > 0) {
+                val previous = offsets.getOrNull(index - 1) ?: initial
+
+                val deltaX = value.x - previous.x
+                val curveXOffset = deltaX * easing
+
+                cubicTo(
+                    x1 = previous.x + curveXOffset,
+                    y1 = previous.y,
+                    x2 = value.x - curveXOffset,
+                    y2 = value.y,
+                    x3 = value.x,
+                    y3 = value.y
+                )
+            }
         }
-
-//        chartData.take(numberOfVisiblePoints).forEachIndexed { index, chartPoint ->
-
-//
-//            val currentOffset = chartPoint.toOffset(
-//                size = size,
-//                sizeOfOneUnit = oneUnitSize
-//            )
-//
-//            drawLine(
-//                color = lineColor,
-//                start = previousOffset,
-//                end = currentOffset
-//            )
-//        }
     }
 }
 
-private fun drawXAxis(
-    drawScope: DrawScope,
-    color: Color,
-    colorSecondary: Color,
-    axisWidth: Float,
-    axisWidthSecondary: Float,
-    canvasSize: Size,
-    maxXValue: Float
-) {
-    val oneUnitSize = canvasSize.width / maxXValue
-    drawScope.drawLine(
-        color = color,
-        start = Offset(x = 0f, y = canvasSize.height),
-        end = Offset(x = canvasSize.width, y = canvasSize.height),
-        strokeWidth = axisWidth,
-        cap = StrokeCap.Round
-    )
-
-    val xRange = (1..maxXValue.toInt()).toList()
-    xRange.forEachIndexed { index, i ->
-        drawScope.drawLine(
-            color = colorSecondary,
-            start = Offset(
-                x = i * oneUnitSize,
-                y = 0f,
-            ),
-            end = Offset(
-                x = i * oneUnitSize,
-                y = canvasSize.height
-            ),
-            strokeWidth = axisWidthSecondary
+private fun getLinePathPercent(
+    originalPath: Path,
+    percent: Float
+): Path {
+    val outputPath = Path()
+    PathMeasure().let {
+        it.setPath(originalPath, false)
+        it.getSegment(
+            startDistance = 0f,
+            stopDistance = it.length * percent,
+            destination = outputPath
         )
     }
+    return outputPath
 }
 
-private fun drawYAxis(
-    drawScope: DrawScope,
-    color: Color,
-    colorSecondary: Color,
-    width: Float,
-    axisWidthSecondary: Float,
-    canvasSize: Size,
-    maxYValue: Float
-) {
-    val oneUnitSize = canvasSize.height / maxYValue
-
-    drawScope.drawLine(
-        color = color,
-        start = Offset(x = 0f, y = 0f),
-        end = Offset(x = 0f, y = canvasSize.height),
-        strokeWidth = width,
-        cap = StrokeCap.Round
-    )
-
-    val yRange = (1 until maxYValue.toInt()).toList()
-    yRange.forEachIndexed { index, i ->
-        drawScope.drawLine(
-            color = colorSecondary,
-            start = Offset(
-                x = 0f,
-                y = i * oneUnitSize,
-            ),
-            end = Offset(
-                x = canvasSize.width,
-                y = i * oneUnitSize
-            ),
-            strokeWidth = axisWidthSecondary
-        )
-    }
-}
-
-
-data class ChartPoint(
-    val x: Float,
-    val y: Float
-)
-
-fun ChartPoint.toOffset(
+private fun ChartPoint.normalize(
     canvasSize: Size,
     maxXCount: Int,
     maxYValue: Float,
