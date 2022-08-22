@@ -18,6 +18,10 @@ object Libs {
     const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:" + Versions.lifecycle
     const val preference = "androidx.preference:preference:" + Versions.preference
 
+    const val firebaseBom = "com.google.firebase:firebase-bom:" + Versions.firebaseBom
+    const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+    const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+
     const val retrofit = "com.squareup.retrofit2:retrofit:" + Versions.retrofit
     const val retrofitConverterMoshi = "com.squareup.retrofit2:converter-moshi:" + Versions.retrofit
     const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:" + Versions.okhttp

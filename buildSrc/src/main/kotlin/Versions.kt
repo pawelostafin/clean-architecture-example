@@ -23,6 +23,9 @@ object Versions {
     const val workRuntime = "2.7.0"
     const val junit = "4.13.2"
     const val benManesVersions = "0.42.0"
+    const val googleServices = "4.3.13"
+    const val firebaseCrashlyticsGradle = "2.9.1"
     const val koin = "3.2.0"
     const val navigation = "2.5.1"
+    const val firebaseBom = "30.3.2"
 }

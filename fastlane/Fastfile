@@ -1,0 +1,64 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+appId = "1:77165847233:android:62c57190880237e760aa40"
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+
+# usage: `fastlane deployToFirebase message:"test message"`
+# 'message' parameter is optional
+  lane :deployToFirebase do |properties|
+    buildReleaseWithVersionCodeIncremented()
+
+    firebase_app_distribution(
+      app: appId,
+      groups: "Testers",
+      release_notes: properties[:message]
+    )
+  end
+
+  private_lane :buildReleaseWithVersionCodeIncremented do |properties|
+    clean()
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      properties: {
+        'versionCode' => getIncrementedVersionCodeFromFirebase()
+      }
+    )
+  end
+
+  desc "gradle clean project"
+  lane :clean do
+    gradle(
+      task: "clean"
+    )
+  end
+
+  lane :getIncrementedVersionCodeFromFirebase do
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: appId
+    )
+    latest_release[:buildVersion].to_i + 1
+  end
+
+end

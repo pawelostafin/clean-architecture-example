@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -88,6 +90,10 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.0-beta02")
 
     implementation(Libs.timber)
+
+    implementation(platform(Libs.firebaseBom))
+    implementation(Libs.firebaseAnalytics)
+    implementation(Libs.firebaseCrashlytics)
 
     implementation(Libs.navigationFragmentKtx)
     implementation(Libs.navigationUiKtx)

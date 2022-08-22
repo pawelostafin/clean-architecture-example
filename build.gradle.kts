@@ -4,6 +4,8 @@ plugins {
     id("com.android.library") version Versions.gradleBuildTools apply false
     id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
     id("com.github.ben-manes.versions") version Versions.benManesVersions apply true
+    id("com.google.gms.google-services") version Versions.googleServices apply false
+    id("com.google.firebase.crashlytics") version Versions.firebaseCrashlyticsGradle apply false
 }
 
 tasks.register("clean", Delete::class) {
