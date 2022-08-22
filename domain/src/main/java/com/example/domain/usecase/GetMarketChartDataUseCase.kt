@@ -17,10 +17,9 @@ class GetMarketChartDataUseCase(
                 currencyId = currencyId,
                 baseCurrency = CurrencyCode.Pln
             )
-            val maxPrice = pricesInTime.maxBy { it.price }.price
             val minPrice = pricesInTime.minBy { it.price }.price
 
-            val isUpInThisTimeFrame = pricesInTime.first().price < maxPrice
+            val isUpInThisTimeFrame = pricesInTime.last().price > pricesInTime.first().price
 
             val points = pricesInTime.mapIndexed { index, marketChartPrice ->
                 ChartPoint(

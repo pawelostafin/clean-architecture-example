@@ -30,9 +30,9 @@ fun MarketDto.toDomainModel(): Market {
         marketCap = market_cap,
         marketCapRank = market_cap_rank,
         totalVolume = total_volume,
-        high_24 = high_24h,
-        low_24 = low_24h,
+        high24h = high_24h,
+        low24h = low_24h,
         priceChange24h = price_change_24h,
-        priceChangePercentage24 = price_change_percentage_24h,
+        priceChangePercentage24h = price_change_percentage_24h,
     )
 }

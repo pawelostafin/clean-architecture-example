@@ -70,6 +70,9 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             modifier = Modifier
                 .layoutId(marketListId)
         ) {
+            item {
+                Spacer(modifier = Modifier.height(64.dp))
+            }
             items(
                 items = items ?: emptyList(),
                 key = { it.id }
@@ -78,6 +81,9 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
                     item = it,
                     onClick = viewModel::itemClicked
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
 
@@ -117,11 +123,13 @@ private fun MarketCell(
             Spacer(modifier = Modifier.width(16.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = item.name,
                     color = AppTheme.colors.textColorPrimary,
                     fontSize = 18.sp
                 )
                 Text(
+                    modifier = Modifier.weight(2f),
                     text = item.price.toPlainString(),
                     color = AppTheme.colors.textColorSecondary,
                     fontSize = 18.sp

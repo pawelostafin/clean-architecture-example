@@ -5,6 +5,16 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -34,33 +45,52 @@ import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
 import com.example.domain.model.ChartData
 import com.example.domain.model.ChartPoint
+import java.math.BigDecimal
 
 @Composable
 fun DetailsScreen(viewModel: DetailsViewModel) {
     val marketInfo by viewModel.marketInfo.collectAsState()
     val chartData by viewModel.chartData.collectAsState()
 
-    val backButtonId = remember { "backButtonId" }
+    Box(
+        modifier = Modifier
+            .background(AppTheme.colors.backgroundPrimary),
+    ) {
+        ScrollableContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            chartData = chartData,
+            marketInfo = marketInfo
+        )
+        BackButton(
+            modifier = Modifier
+                .align(Alignment.TopStart),
+            onClick = { viewModel.backButtonClicked() }
+        )
+    }
+}
+
+@Composable
+fun ScrollableContent(
+    modifier: Modifier = Modifier,
+    chartData: ChartData?,
+    marketInfo: MarketInfo?
+) {
     val chartId = remember { "chartId" }
-    val pairNameId = remember { "pairNameId" }
+    val detailsContainerId = remember { "detailsContainerId" }
 
     val constraints = remember {
         createConstraints(
-            backButtonId = backButtonId,
             chartId = chartId,
-            pairNameId = pairNameId
+            detailsContainerId = detailsContainerId
         )
     }
-
     ConstraintLayout(
-        modifier = Modifier
-            .background(AppTheme.colors.backgroundPrimary),
+        modifier = modifier,
         constraintSet = constraints,
     ) {
-        BackButton(
-            modifier = Modifier.layoutId(backButtonId),
-            onClick = { viewModel.backButtonClicked() }
-        )
+
         chartData?.let {
             Chart(
                 modifier = Modifier.layoutId(chartId),
@@ -68,33 +98,158 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
             )
         }
         marketInfo?.let {
-            Text(
-                modifier = Modifier.layoutId(pairNameId),
-                text = it.name,
-                fontSize = 32.sp,
-                color = AppTheme.colors.textColorPrimary
-            )
+            Column(
+                modifier = Modifier.layoutId(detailsContainerId)
+            ) {
+                val weight1 = remember { 1.5f }
+                val weight2 = remember { 3f }
+
+                Text(
+                    text = it.name,
+                    fontSize = 32.sp,
+                    color = AppTheme.colors.textColorPrimary
+                )
+                Text(
+                    text = it.currentPrice.toPlainString() + " " + it.baseCurrency,
+                    fontSize = 26.sp,
+                    color = AppTheme.colors.textColorPrimary
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Change 24h:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.priceChange24h.toPlainString(),
+                        fontSize = 16.sp,
+                        color = if (it.priceChange24h > BigDecimal.ZERO) {
+                            AppTheme.colors.chartGreen
+                        } else {
+                            AppTheme.colors.chartRed
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Change 24h %:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.priceChangePercentage24h.toPlainString() + "%",
+                        fontSize = 16.sp,
+                        color = if (it.priceChangePercentage24h > BigDecimal.ZERO) {
+                            AppTheme.colors.chartGreen
+                        } else {
+                            AppTheme.colors.chartRed
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "High 24h:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.high24h.toPlainString(),
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Low 24h:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.low24h.toPlainString(),
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Total Volume",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.totalVolume.toPlainString(),
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Market Cap rank:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.marketCapRank.toString(),
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.weight(weight1),
+                        text = "Market Cap:",
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        modifier = Modifier.weight(weight2),
+                        text = it.marketCap.toString(),
+                        fontSize = 16.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }
 
 private fun createConstraints(
-    backButtonId: String,
     chartId: String,
-    pairNameId: String
+    detailsContainerId: String
 ): ConstraintSet {
     return ConstraintSet {
-        val backButton = createRefFor(backButtonId)
         val chart = createRefFor(chartId)
-        val pairName = createRefFor(pairNameId)
-
-        constrain(backButton) {
-            top.linkTo(parent.top, 8.dp)
-            start.linkTo(parent.start, 8.dp)
-        }
+        val detailsContainer = createRefFor(detailsContainerId)
 
         constrain(chart) {
-            top.linkTo(backButton.bottom, 16.dp)
+            top.linkTo(parent.top, 56.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
 
@@ -102,7 +257,7 @@ private fun createConstraints(
             width = Dimension.ratio("3:1")
         }
 
-        constrain(pairName) {
+        constrain(detailsContainer) {
             top.linkTo(chart.bottom, 12.dp)
             start.linkTo(parent.start, 24.dp)
         }

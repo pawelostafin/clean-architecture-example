@@ -5,11 +5,12 @@ import com.example.cleanarchitectureexample.ui.base.EventChannel
 import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.domain.model.ChartData
+import com.example.domain.model.CurrencyCode
 import com.example.domain.usecase.GetMarketChartDataUseCase
 import com.example.domain.usecase.GetMarketUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import timber.log.Timber
+import java.math.BigDecimal
 
 class DetailsViewModel(
     private val currencyId: String,
@@ -38,15 +39,24 @@ class DetailsViewModel(
     private fun getMarketInfo() {
         viewModelLaunch {
             val market = getMarketUseCase.execute(currencyId = currencyId)
-            _marketInfo.value = MarketInfo(name = market.name)
+            _marketInfo.value = MarketInfo(
+                name = market.name,
+                currentPrice = market.currentPrice,
+                baseCurrency = CurrencyCode.Pln.rawValue.uppercase(),
+                high24h = market.high24h,
+                low24h = market.low24h,
+                priceChange24h = market.priceChange24h,
+                priceChangePercentage24h = market.priceChangePercentage24h,
+                totalVolume = market.totalVolume,
+                marketCap = market.marketCap,
+                marketCapRank = market.marketCapRank
+            )
         }
     }
 
     private fun getMarketChartData() {
         viewModelLaunch {
-            _chartData.value = getMarketChartDataUseCase.execute(currencyId = currencyId).also {
-                Timber.d("ELOELO $it")
-            }
+            _chartData.value = getMarketChartDataUseCase.execute(currencyId = currencyId)
         }
     }
 
@@ -57,5 +67,14 @@ class DetailsViewModel(
 }
 
 data class MarketInfo(
-    val name: String
+    val baseCurrency: String,
+    val name: String,
+    val currentPrice: BigDecimal,
+    val high24h: BigDecimal,
+    val low24h: BigDecimal,
+    val priceChange24h: BigDecimal,
+    val priceChangePercentage24h: BigDecimal,
+    val totalVolume: BigDecimal,
+    val marketCap: Long,
+    val marketCapRank: Long
 )

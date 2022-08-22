@@ -11,8 +11,8 @@ data class Market(
     val marketCap: Long,
     val marketCapRank: Long,
     val totalVolume: BigDecimal,
-    val high_24: BigDecimal,
-    val low_24: BigDecimal,
+    val high24h: BigDecimal,
+    val low24h: BigDecimal,
     val priceChange24h: BigDecimal,
-    val priceChangePercentage24: BigDecimal
+    val priceChangePercentage24h: BigDecimal
 )

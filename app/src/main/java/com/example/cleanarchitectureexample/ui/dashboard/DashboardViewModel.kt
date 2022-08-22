@@ -39,7 +39,7 @@ class DashboardViewModel(
     }
 
     private fun observeMarkets() {
-        val baseCurrency = CurrencyCode.Btc
+        val baseCurrency = CurrencyCode.Pln
         viewModelObserveFlow(
             onProgressChanged = { _progressViewVisibility.value = it },
             flowProvider = { observeMarketsUseCase.execute(baseCurrency = baseCurrency) },
