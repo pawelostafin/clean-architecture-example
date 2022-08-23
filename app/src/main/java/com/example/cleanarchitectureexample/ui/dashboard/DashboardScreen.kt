@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -144,37 +145,47 @@ private fun BaseCurrencySelector(
     onBaseCurrencyChangeRequest: (CurrencyCode) -> Unit,
     onClick: () -> Unit
 ) {
-    Box(
+
+    Row(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .clickableWithRipple { onClick.invoke() }
+            .padding(12.dp),
     ) {
         Text(
-            modifier = Modifier.padding(12.dp),
-            text = "BASE CURRENCY: ${state.baseCurrency.toStringValue()}",
-            color = AppTheme.colors.textColorPrimary,
+            text = "BASE CURRENCY:",
+            color = AppTheme.colors.textColorSecondary,
             fontSize = 18.sp,
             letterSpacing = 1.5.sp
         )
-        CustomDropdownMenu(
-            isDropdownVisible = state.isDropdownVisible,
-            onDismissRequest = onDismissRequest
-        ) {
-            state.baseCurrencyOptions.forEach {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickableWithRipple { onBaseCurrencyChangeRequest.invoke(it) }
-                        .padding(
-                            start = 18.dp,
-                            end = 18.dp,
-                            top = 12.dp,
-                            bottom = 12.dp
-                        ),
-                    text = it.toStringValue(),
-                    fontSize = 18.sp,
-                    color = AppTheme.colors.textColorPrimary
-                )
+        Spacer(modifier = Modifier.width(4.dp))
+        Box {
+            Text(
+                text = state.baseCurrency.toStringValue(),
+                color = AppTheme.colors.textColorPrimary,
+                fontSize = 18.sp,
+                letterSpacing = 1.5.sp
+            )
+            CustomDropdownMenu(
+                isDropdownVisible = state.isDropdownVisible,
+                onDismissRequest = onDismissRequest,
+                offset = DpOffset(x = (-12).dp, y = 0.dp)
+            ) {
+                state.baseCurrencyOptions.forEach {
+                    Text(
+                        modifier = Modifier
+                            .clickableWithRipple { onBaseCurrencyChangeRequest.invoke(it) }
+                            .padding(
+                                start = 18.dp,
+                                end = 18.dp,
+                                top = 12.dp,
+                                bottom = 12.dp
+                            ),
+                        text = it.toStringValue(),
+                        fontSize = 18.sp,
+                        color = AppTheme.colors.textColorPrimary
+                    )
+                }
             }
         }
     }
@@ -277,6 +288,8 @@ private fun createConstraints(
         constrain(baseCurrencySelector) {
             top.linkTo(parent.top, 8.dp)
             start.linkTo(parent.start, 8.dp)
+
+            width = Dimension.wrapContent
         }
     }
 }

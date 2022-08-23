@@ -133,7 +133,8 @@ fun DarkModeSettingsItem(
             )
             CustomDropdownMenu(
                 isDropdownVisible = isDropdownVisible,
-                onDismissRequest = onDismissRequest
+                onDismissRequest = onDismissRequest,
+                offset = DpOffset(x = 8.dp, y = 0.dp)
             ) {
                 DarkThemeMode.values().forEach {
                     Text(
@@ -158,8 +159,10 @@ fun DarkModeSettingsItem(
 
 @Composable
 fun CustomDropdownMenu(
+    modifier: Modifier = Modifier,
     isDropdownVisible: Boolean,
     onDismissRequest: () -> Unit,
+    offset: DpOffset = DpOffset.Zero,
     content: @Composable ColumnScope.() -> Unit
 ) {
     MaterialTheme(
@@ -171,12 +174,10 @@ fun CustomDropdownMenu(
         )
     ) {
         DropdownMenu(
+            modifier = modifier,
             expanded = isDropdownVisible,
             onDismissRequest = onDismissRequest,
-            offset = DpOffset(
-                x = 8.dp,
-                y = 0.dp
-            ),
+            offset = offset,
             content = content
         )
     }
