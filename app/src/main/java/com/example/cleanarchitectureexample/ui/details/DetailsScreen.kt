@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,16 +36,19 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.example.cleanarchitectureexample.ui.dashboard.CurrencyImage
 import com.example.cleanarchitectureexample.ui.settings.BackButton
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
 import com.example.domain.model.ChartData
+import com.example.domain.model.ChartDataTrend
 import com.example.domain.model.ChartPoint
 import java.math.BigDecimal
 
@@ -65,7 +70,8 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
         )
         BackButton(
             modifier = Modifier
-                .align(Alignment.TopStart),
+                .align(Alignment.TopStart)
+                .padding(start = 8.dp, top = 8.dp),
             onClick = { viewModel.backButtonClicked() }
         )
     }
@@ -98,145 +104,124 @@ fun ScrollableContent(
             )
         }
         marketInfo?.let {
-            Column(
-                modifier = Modifier.layoutId(detailsContainerId)
-            ) {
-                val weight1 = remember { 1.5f }
-                val weight2 = remember { 3f }
-
-                Text(
-                    text = it.name,
-                    fontSize = 32.sp,
-                    color = AppTheme.colors.textColorPrimary
-                )
-                Text(
-                    text = it.currentPrice.toPlainString() + " " + it.baseCurrency,
-                    fontSize = 26.sp,
-                    color = AppTheme.colors.textColorPrimary
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Change 24h:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.priceChange24h.toPlainString(),
-                        fontSize = 16.sp,
-                        color = if (it.priceChange24h > BigDecimal.ZERO) {
-                            AppTheme.colors.chartGreen
-                        } else {
-                            AppTheme.colors.chartRed
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Change 24h %:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.priceChangePercentage24h.toPlainString() + "%",
-                        fontSize = 16.sp,
-                        color = if (it.priceChangePercentage24h > BigDecimal.ZERO) {
-                            AppTheme.colors.chartGreen
-                        } else {
-                            AppTheme.colors.chartRed
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "High 24h:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.high24h.toPlainString(),
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Low 24h:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.low24h.toPlainString(),
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Total Volume",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.totalVolume.toPlainString(),
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Market Cap rank:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.marketCapRank.toString(),
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(weight1),
-                        text = "Market Cap:",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorSecondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        modifier = Modifier.weight(weight2),
-                        text = it.marketCap.toString(),
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.textColorPrimary
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+            MarketInfoView(
+                modifier = Modifier.layoutId(detailsContainerId),
+                marketInfo = it
+            )
         }
+    }
+}
+
+@Composable
+private fun MarketInfoView(
+    modifier: Modifier = Modifier,
+    marketInfo: MarketInfo
+) {
+    val topSpacerHeight = remember { 8.dp }
+    val spacerHeight = remember { 2.dp }
+    val bottomSpacerHeight = remember { 24.dp }
+    Column(
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CurrencyImage(
+                url = marketInfo.imageUrl,
+                modifier = Modifier.requiredSize(40.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = marketInfo.name,
+                fontSize = 32.sp,
+                color = AppTheme.colors.textColorPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = marketInfo.currentPrice.toPlainString() + " " + marketInfo.baseCurrency,
+            fontSize = 24.sp,
+            color = AppTheme.colors.textColorPrimary
+        )
+        Spacer(modifier = Modifier.height(topSpacerHeight))
+        MarketInfoRow(
+            title = "Change 24h:",
+            value = marketInfo.priceChange24h.toPlainString(),
+            valueColor = marketInfo.priceChange24h.toTrendColor()
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "Change 24h %:",
+            value = marketInfo.priceChangePercentage24h.toPlainString() + "%",
+            valueColor = marketInfo.priceChangePercentage24h.toTrendColor()
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "High 24h:",
+            value = marketInfo.high24h.toPlainString()
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "Low 24h:",
+            value = marketInfo.low24h.toPlainString()
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "Total Volume:",
+            value = marketInfo.totalVolume.toPlainString()
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "Market Cap rank:",
+            value = marketInfo.marketCapRank.toString(),
+        )
+        Spacer(modifier = Modifier.height(spacerHeight))
+        MarketInfoRow(
+            title = "Market Cap:",
+            value = marketInfo.marketCap.toString(),
+        )
+        Spacer(modifier = Modifier.height(bottomSpacerHeight))
+    }
+}
+
+@Composable
+private fun MarketInfoRow(
+    modifier: Modifier = Modifier,
+    title: String,
+    value: String,
+    titleColor: Color = AppTheme.colors.textColorSecondary,
+    valueColor: Color = AppTheme.colors.textColorPrimary
+) {
+    val weight1 = remember { 1.5f }
+    val weight2 = remember { 3f }
+    val textSize = remember { 16.sp }
+    val spacerWidth = remember { 4.dp }
+    Row(modifier = modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.weight(weight1),
+            text = title,
+            fontSize = textSize,
+            color = titleColor
+        )
+        Spacer(modifier = Modifier.width(spacerWidth))
+        Text(
+            modifier = Modifier.weight(weight2),
+            text = value,
+            fontSize = textSize,
+            color = valueColor
+        )
+    }
+}
+
+@Composable
+private fun BigDecimal.toTrendColor(): Color {
+    return when {
+        this > BigDecimal.ZERO -> AppTheme.colors.chartGreen
+        this < BigDecimal.ZERO -> AppTheme.colors.chartRed
+        else -> AppTheme.colors.chartNeutral
     }
 }
 
@@ -270,10 +255,10 @@ fun Chart(
     modifier: Modifier = Modifier
 ) {
     val lineWidth = 1.dp.pxValue
-    val chartColor = if (chartData.isUpInThisTimeFrame) {
-        AppTheme.colors.chartGreen
-    } else {
-        AppTheme.colors.chartRed
+    val chartColor = when (chartData.trend) {
+        ChartDataTrend.UP -> AppTheme.colors.chartGreen
+        ChartDataTrend.DOWN -> AppTheme.colors.chartRed
+        ChartDataTrend.EQUAL -> AppTheme.colors.chartNeutral
     }
     val backgroundColor = remember(chartColor) { chartColor.withAlpha(0.3f) }
     val animatedLinePercentage = remember { Animatable(0f) }

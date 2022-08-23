@@ -5,6 +5,12 @@ enum class CurrencyCode(val rawValue: String) {
     Pln("pln"),
     Usd("usd"),
     Eur("eur"),
-    Btc("btc")
+    Btc("btc");
+
+    companion object {
+        fun fromRawValue(rawValue: String): CurrencyCode? {
+            return values().firstOrNull { it.rawValue == rawValue }
+        }
+    }
 
 }

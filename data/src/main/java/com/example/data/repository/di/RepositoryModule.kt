@@ -1,10 +1,12 @@
 package com.example.data.repository.di
 
 import com.example.data.repository.AuthRepositoryImpl
+import com.example.data.repository.BaseCurrencyRepositoryImpl
 import com.example.data.repository.MarketRepositoryImpl
 import com.example.data.repository.SettingsRepositoryImpl
 import com.example.data.repository.UserDetailsRepositoryImpl
 import com.example.domain.repository.AuthRepository
+import com.example.domain.repository.BaseCurrencyRepository
 import com.example.domain.repository.MarketRepository
 import com.example.domain.repository.SettingsRepository
 import com.example.domain.repository.UserDetailsRepository
@@ -36,6 +38,12 @@ val repositoryModule = module {
     single<MarketRepository> {
         MarketRepositoryImpl(
             marketService = get()
+        )
+    }
+
+    single<BaseCurrencyRepository> {
+        BaseCurrencyRepositoryImpl(
+            sharedPreferences = get()
         )
     }
 

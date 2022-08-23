@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
@@ -33,24 +34,29 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import com.example.cleanarchitectureexample.ui.settings.CustomDropdownMenu
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
+import com.example.domain.model.CurrencyCode
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
     val profileButtonState by viewModel.profileButtonState.collectAsState()
     val items by viewModel.items.collectAsState()
     val progressViewVisibility by viewModel.progressViewVisibility.collectAsState()
+    val baseCurrencySelectorState by viewModel.baseCurrencySelectorState.collectAsState()
 
     val profileButtonId = remember { "profileButton" }
     val marketListId = remember { "marketList" }
     val progressViewId = remember { "progressView" }
+    val baseCurrencySelectorId = remember { "baseCurrencySelector" }
     val constraints = remember {
         createConstraints(
             profileButtonId = profileButtonId,
             marketListId = marketListId,
             progressViewId = progressViewId,
+            baseCurrencySelectorId = baseCurrencySelectorId
         )
     }
 
@@ -87,6 +93,16 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             }
         }
 
+        baseCurrencySelectorState?.let {
+            BaseCurrencySelector(
+                modifier = Modifier.layoutId(baseCurrencySelectorId),
+                state = it,
+                onDismissRequest = viewModel::baseCurrencySelectorDismissRequested,
+                onBaseCurrencyChangeRequest = viewModel::baseCurrencyChangeRequested,
+                onClick = viewModel::baseCurrencySelectorClicked
+            )
+        }
+
         ProfileButton(
             state = profileButtonState,
             onClick = viewModel::profileButtonClicked,
@@ -95,6 +111,49 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         )
     }
 
+}
+
+@Composable
+private fun BaseCurrencySelector(
+    modifier: Modifier = Modifier,
+    state: BaseCurrencySelectorState,
+    onDismissRequest: () -> Unit,
+    onBaseCurrencyChangeRequest: (CurrencyCode) -> Unit,
+    onClick: () -> Unit
+) {
+    Box(modifier = modifier.clickableWithRipple { onClick.invoke() }) {
+        Text(
+            modifier = Modifier.padding(12.dp),
+            text = "Base currency: ${state.baseCurrency.toStringValue()}",
+            color = AppTheme.colors.textColorPrimary,
+            fontSize = 18.sp
+        )
+        CustomDropdownMenu(
+            isDropdownVisible = state.isDropdownVisible,
+            onDismissRequest = onDismissRequest
+        ) {
+            state.baseCurrencyOptions.forEach {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickableWithRipple { onBaseCurrencyChangeRequest.invoke(it) }
+                        .padding(
+                            start = 18.dp,
+                            end = 18.dp,
+                            top = 12.dp,
+                            bottom = 12.dp
+                        ),
+                    text = it.toStringValue(),
+                    fontSize = 18.sp,
+                    color = AppTheme.colors.textColorPrimary
+                )
+            }
+        }
+    }
+}
+
+private fun CurrencyCode.toStringValue(): String {
+    return rawValue.uppercase()
 }
 
 @Composable
@@ -144,10 +203,13 @@ fun CurrencyImage(
     url: String?,
     modifier: Modifier = Modifier
 ) {
+    val circleShape = remember { CircleShape }
     AsyncImage(
         modifier = modifier
-            .clip(CircleShape)
-            .background(AppTheme.colors.textColorPrimary),
+            .clip(circleShape)
+            .background(Color.White)
+            .padding(1.dp)
+            .clip(circleShape),
         model = url,
         contentDescription = null
     )
@@ -156,12 +218,14 @@ fun CurrencyImage(
 private fun createConstraints(
     profileButtonId: String,
     marketListId: String,
-    progressViewId: String
+    progressViewId: String,
+    baseCurrencySelectorId: String,
 ): ConstraintSet {
     return ConstraintSet {
         val profileButton = createRefFor(profileButtonId)
         val marketList = createRefFor(marketListId)
         val progressView = createRefFor(progressViewId)
+        val baseCurrencySelector = createRefFor(baseCurrencySelectorId)
 
         constrain(profileButton) {
             top.linkTo(parent.top, 8.dp)
@@ -181,6 +245,10 @@ private fun createConstraints(
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
+        }
+        constrain(baseCurrencySelector) {
+            top.linkTo(parent.top, 8.dp)
+            start.linkTo(parent.start, 8.dp)
         }
     }
 }

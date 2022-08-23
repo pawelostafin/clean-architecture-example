@@ -30,7 +30,9 @@ val viewModelModule = module {
     viewModel {
         DashboardViewModel(
             getUserDetailsUseCase = get(),
-            observeMarketsUseCase = get()
+            observeMarketsUseCase = get(),
+            observeBaseCurrencyUseCase = get(),
+            setBaseCurrencyUseCase = get()
         )
     }
 

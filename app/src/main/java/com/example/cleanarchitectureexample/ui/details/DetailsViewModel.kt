@@ -41,6 +41,7 @@ class DetailsViewModel(
             val market = getMarketUseCase.execute(currencyId = currencyId)
             _marketInfo.value = MarketInfo(
                 name = market.name,
+                imageUrl = market.image,
                 currentPrice = market.currentPrice,
                 baseCurrency = CurrencyCode.Pln.rawValue.uppercase(),
                 high24h = market.high24h,
@@ -69,6 +70,7 @@ class DetailsViewModel(
 data class MarketInfo(
     val baseCurrency: String,
     val name: String,
+    val imageUrl: String?,
     val currentPrice: BigDecimal,
     val high24h: BigDecimal,
     val low24h: BigDecimal,

@@ -6,8 +6,10 @@ import com.example.domain.usecase.GetUserDetailsUseCase
 import com.example.domain.usecase.IsUserLoggedInUseCase
 import com.example.domain.usecase.LoginUseCase
 import com.example.domain.usecase.LogoutUseCase
+import com.example.domain.usecase.ObserveBaseCurrencyUseCase
 import com.example.domain.usecase.ObserveDarkThemeModeUseCase
 import com.example.domain.usecase.ObserveMarketsUseCase
+import com.example.domain.usecase.SetBaseCurrencyUseCase
 import com.example.domain.usecase.SetDarkThemeModeUseCase
 import org.koin.dsl.module
 
@@ -64,6 +66,18 @@ val useCaseModule = module {
     factory {
         GetMarketUseCase(
             marketRepository = get()
+        )
+    }
+
+    factory {
+        ObserveBaseCurrencyUseCase(
+            baseCurrencyRepository = get()
+        )
+    }
+
+    factory {
+        SetBaseCurrencyUseCase(
+            baseCurrencyRepository = get()
         )
     }
 

@@ -1,11 +1,13 @@
 package com.example.domain.usecase
 
 import com.example.domain.model.ChartData
+import com.example.domain.model.ChartDataTrend
 import com.example.domain.model.ChartPoint
 import com.example.domain.model.CurrencyCode
 import com.example.domain.repository.MarketRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class GetMarketChartDataUseCase(
     private val marketRepository: MarketRepository
@@ -19,7 +21,12 @@ class GetMarketChartDataUseCase(
             )
             val minPrice = pricesInTime.minBy { it.price }.price
 
-            val isUpInThisTimeFrame = pricesInTime.last().price > pricesInTime.first().price
+            val priceDifference = pricesInTime.last().price - pricesInTime.first().price
+            val trend = when {
+                priceDifference > BigDecimal.ZERO -> ChartDataTrend.UP
+                priceDifference < BigDecimal.ZERO -> ChartDataTrend.DOWN
+                else -> ChartDataTrend.EQUAL
+            }
 
             val points = pricesInTime.mapIndexed { index, marketChartPrice ->
                 ChartPoint(
@@ -29,7 +36,7 @@ class GetMarketChartDataUseCase(
             }
             ChartData(
                 points = points,
-                isUpInThisTimeFrame = isUpInThisTimeFrame,
+                trend = trend,
                 maxY = points.maxOf { it.y },
                 minY = points.minOf { it.y }
             )

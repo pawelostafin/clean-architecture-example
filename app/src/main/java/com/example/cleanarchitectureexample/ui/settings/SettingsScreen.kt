@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -130,41 +131,54 @@ fun DarkModeSettingsItem(
                 color = AppTheme.colors.textColorSecondary,
                 fontSize = 18.sp
             )
-            MaterialTheme(
-                shapes = MaterialTheme.shapes.copy(
-                    medium = RoundedCornerShape(12.dp)
-                ),
-                colors = MaterialTheme.colors.copy(
-                    surface = AppTheme.colors.dropdownBackground
-                )
+            CustomDropdownMenu(
+                isDropdownVisible = isDropdownVisible,
+                onDismissRequest = onDismissRequest
             ) {
-                DropdownMenu(
-                    expanded = isDropdownVisible,
-                    onDismissRequest = onDismissRequest,
-                    offset = DpOffset(
-                        x = 8.dp,
-                        y = 0.dp
-                    ),
-                ) {
-                    DarkThemeMode.values().forEach {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickableWithRipple { onModeChangeRequest.invoke(it) }
-                                .padding(
-                                    start = 18.dp,
-                                    end = 18.dp,
-                                    top = 12.dp,
-                                    bottom = 12.dp
-                                ),
-                            fontSize = 18.sp,
-                            text = it.toStringResource(),
-                            color = AppTheme.colors.textColorPrimary
-                        )
-                    }
+                DarkThemeMode.values().forEach {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickableWithRipple { onModeChangeRequest.invoke(it) }
+                            .padding(
+                                start = 18.dp,
+                                end = 18.dp,
+                                top = 12.dp,
+                                bottom = 12.dp
+                            ),
+                        fontSize = 18.sp,
+                        text = it.toStringResource(),
+                        color = AppTheme.colors.textColorPrimary
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomDropdownMenu(
+    isDropdownVisible: Boolean,
+    onDismissRequest: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    MaterialTheme(
+        shapes = MaterialTheme.shapes.copy(
+            medium = RoundedCornerShape(12.dp)
+        ),
+        colors = MaterialTheme.colors.copy(
+            surface = AppTheme.colors.dropdownBackground
+        )
+    ) {
+        DropdownMenu(
+            expanded = isDropdownVisible,
+            onDismissRequest = onDismissRequest,
+            offset = DpOffset(
+                x = 8.dp,
+                y = 0.dp
+            ),
+            content = content
+        )
     }
 }
 

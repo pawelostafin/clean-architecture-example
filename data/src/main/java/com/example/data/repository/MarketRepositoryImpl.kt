@@ -6,12 +6,12 @@ import com.example.domain.model.CurrencyCode
 import com.example.domain.model.Market
 import com.example.domain.model.MarketChartPrice
 import com.example.domain.repository.MarketRepository
+import com.example.domain.util.ReusableCoroutineScope
+import com.example.domain.util.supportLaunch
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
@@ -23,6 +23,9 @@ class MarketRepositoryImpl(
     private var currentBaseCurrency: CurrencyCode? = null
 
     private val _markets = MutableStateFlow<List<Market>?>(null)
+
+    @Volatile
+    private var periodicCallsScope = ReusableCoroutineScope()
 
     override fun observeMarkets(baseCurrency: CurrencyCode): Flow<List<Market>?> {
         if (baseCurrency != currentBaseCurrency) {
@@ -55,17 +58,16 @@ class MarketRepositoryImpl(
     }
 
     private fun startPeriodicCalls(baseCurrencyCode: CurrencyCode) {
-        GlobalScope.launch {
+        periodicCallsScope.cancelAndReset()
+        periodicCallsScope.supportLaunch {
             while (true) {
                 runCatching {
-                    withContext(Dispatchers.IO) {
-                        val response = marketService.getMarkets(vsCurrency = baseCurrencyCode.rawValue)
-                        _markets.value = response.map { it.toDomainModel() }
-                        delay(10_000L)
-                    }
+                    val response = marketService.getMarkets(vsCurrency = baseCurrencyCode.rawValue)
+                    _markets.value = response.map { it.toDomainModel() }
                 }.onFailure {
                     Timber.e(it)
                 }
+                delay(10_000L)
             }
         }
     }
