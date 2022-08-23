@@ -1,5 +1,6 @@
 package com.example.domain.usecase.di
 
+import com.example.domain.usecase.GetBaseCurrencyCodeUseCase
 import com.example.domain.usecase.GetMarketChartDataUseCase
 import com.example.domain.usecase.GetMarketUseCase
 import com.example.domain.usecase.GetUserDetailsUseCase
@@ -77,6 +78,12 @@ val useCaseModule = module {
 
     factory {
         SetBaseCurrencyUseCase(
+            baseCurrencyRepository = get()
+        )
+    }
+
+    factory {
+        GetBaseCurrencyCodeUseCase(
             baseCurrencyRepository = get()
         )
     }

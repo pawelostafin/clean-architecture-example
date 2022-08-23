@@ -152,7 +152,7 @@ private fun BaseCurrencySelector(
     }
 }
 
-private fun CurrencyCode.toStringValue(): String {
+fun CurrencyCode.toStringValue(): String {
     return rawValue.uppercase()
 }
 

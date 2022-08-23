@@ -2,14 +2,13 @@ package com.example.domain.usecase
 
 import com.example.domain.model.CurrencyCode
 import com.example.domain.repository.BaseCurrencyRepository
-import kotlinx.coroutines.flow.Flow
 
-class ObserveBaseCurrencyUseCase(
+class GetBaseCurrencyCodeUseCase(
     private val baseCurrencyRepository: BaseCurrencyRepository
 ) {
 
-    fun execute(): Flow<CurrencyCode> {
-        return baseCurrencyRepository.observe()
+    suspend fun execute(): CurrencyCode {
+        return baseCurrencyRepository.get()
     }
 
 }

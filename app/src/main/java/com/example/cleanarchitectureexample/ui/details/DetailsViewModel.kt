@@ -6,6 +6,7 @@ import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.domain.model.ChartData
 import com.example.domain.model.CurrencyCode
+import com.example.domain.usecase.GetBaseCurrencyCodeUseCase
 import com.example.domain.usecase.GetMarketChartDataUseCase
 import com.example.domain.usecase.GetMarketUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import java.math.BigDecimal
 class DetailsViewModel(
     private val currencyId: String,
     private val getMarketChartDataUseCase: GetMarketChartDataUseCase,
-    private val getMarketUseCase: GetMarketUseCase
+    private val getMarketUseCase: GetMarketUseCase,
+    private val getBaseCurrencyCodeUseCase: GetBaseCurrencyCodeUseCase
 ) : BaseViewModel() {
 
     private val _navigation = EventChannel<Navigation>()
@@ -39,11 +41,12 @@ class DetailsViewModel(
     private fun getMarketInfo() {
         viewModelLaunch {
             val market = getMarketUseCase.execute(currencyId = currencyId)
+            val baseCurrency = getBaseCurrencyCodeUseCase.execute()
             _marketInfo.value = MarketInfo(
                 name = market.name,
                 imageUrl = market.image,
                 currentPrice = market.currentPrice,
-                baseCurrency = CurrencyCode.Pln.rawValue.uppercase(),
+                baseCurrency = baseCurrency,
                 high24h = market.high24h,
                 low24h = market.low24h,
                 priceChange24h = market.priceChange24h,
@@ -68,7 +71,7 @@ class DetailsViewModel(
 }
 
 data class MarketInfo(
-    val baseCurrency: String,
+    val baseCurrency: CurrencyCode,
     val name: String,
     val imageUrl: String?,
     val currentPrice: BigDecimal,

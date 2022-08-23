@@ -10,20 +10,27 @@ class BaseCurrencyRepositoryImpl(
     private val sharedPreferences: SharedPreferences
 ) : BaseCurrencyRepository {
 
-    private val _baseCurrency = MutableStateFlow<CurrencyCode?>(null)
+    private val _baseCurrency by lazy {
+        MutableStateFlow(getInitialValue())
+    }
 
-    override fun observe(): Flow<CurrencyCode?> {
-        if (_baseCurrency.value == null) {
-            val default = CurrencyCode.Pln
-            val savedValue = getSavedValue()
-            _baseCurrency.value = savedValue ?: default
-        }
+    override fun observe(): Flow<CurrencyCode> {
         return _baseCurrency
     }
 
     override fun set(baseCurrencyCode: CurrencyCode) {
         saveBaseCurrency(baseCurrencyCode)
         _baseCurrency.value = baseCurrencyCode
+    }
+
+    override suspend fun get(): CurrencyCode {
+        return _baseCurrency.value
+    }
+
+    private fun getInitialValue(): CurrencyCode {
+        val default = CurrencyCode.Pln
+        val savedValue = getSavedValue()
+        return savedValue ?: default
     }
 
     private fun getSavedValue(): CurrencyCode? {

@@ -13,7 +13,6 @@ import com.example.domain.usecase.SetBaseCurrencyUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -51,8 +50,8 @@ class DashboardViewModel(
     private fun observeBaseCurrency() {
         viewModelObserveFlow(
             flowProvider = { observeBaseCurrencyUseCase.execute() },
-            onEach = { baseCurrencyCode ->
-                val newValue = baseCurrencyCode?.let { getNewBaseCurrencySelectorValue(it) }
+            onEach = {
+                val newValue = getNewBaseCurrencySelectorValue(it)
                 _baseCurrencySelectorState.value = newValue
             }
         )
@@ -77,7 +76,6 @@ class DashboardViewModel(
             onProgressChanged = { _progressViewVisibility.value = it },
             flowProvider = {
                 observeBaseCurrencyUseCase.execute()
-                    .filterNotNull()
                     .flatMapLatest {
                         observeMarketsUseCase.execute(baseCurrency = it)
                     }

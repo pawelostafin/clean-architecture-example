@@ -5,8 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface BaseCurrencyRepository {
 
-    fun observe(): Flow<CurrencyCode?>
+    fun observe(): Flow<CurrencyCode>
 
     fun set(baseCurrencyCode: CurrencyCode)
+
+    suspend fun get(): CurrencyCode
 
 }

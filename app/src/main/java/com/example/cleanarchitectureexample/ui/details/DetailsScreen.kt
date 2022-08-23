@@ -44,6 +44,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.example.cleanarchitectureexample.ui.dashboard.CurrencyImage
+import com.example.cleanarchitectureexample.ui.dashboard.toStringValue
 import com.example.cleanarchitectureexample.ui.settings.BackButton
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
@@ -117,7 +118,7 @@ private fun MarketInfoView(
     modifier: Modifier = Modifier,
     marketInfo: MarketInfo
 ) {
-    val topSpacerHeight = remember { 8.dp }
+    val topSpacerHeight = remember { 12.dp }
     val spacerHeight = remember { 2.dp }
     val bottomSpacerHeight = remember { 24.dp }
     Column(
@@ -131,7 +132,7 @@ private fun MarketInfoView(
                 url = marketInfo.imageUrl,
                 modifier = Modifier.requiredSize(40.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = marketInfo.name,
                 fontSize = 32.sp,
@@ -140,9 +141,12 @@ private fun MarketInfoView(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+        val currentPriceText = remember(marketInfo) {
+            marketInfo.currentPrice.toPlainString() + " " + marketInfo.baseCurrency.toStringValue()
+        }
         Text(
-            text = marketInfo.currentPrice.toPlainString() + " " + marketInfo.baseCurrency,
+            text = currentPriceText,
             fontSize = 24.sp,
             color = AppTheme.colors.textColorPrimary
         )

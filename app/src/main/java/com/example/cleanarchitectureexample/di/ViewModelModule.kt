@@ -60,7 +60,8 @@ val viewModelModule = module {
         DetailsViewModel(
             currencyId = currencyId,
             getMarketChartDataUseCase = get(),
-            getMarketUseCase = get()
+            getMarketUseCase = get(),
+            getBaseCurrencyCodeUseCase = get()
         )
     }
 
