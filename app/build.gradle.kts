@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -69,10 +69,6 @@ android {
         }
     }
 
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {

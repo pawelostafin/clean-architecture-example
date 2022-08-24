@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -30,10 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = AppConfig.jvmTarget
     }
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {

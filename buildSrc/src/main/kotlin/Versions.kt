@@ -25,6 +25,7 @@ object Versions {
     const val benManesVersions = "0.42.0"
     const val googleServices = "4.3.13"
     const val firebaseCrashlyticsGradle = "2.9.1"
+    const val ksp = "1.7.10-1.0.6"
     const val koin = "3.2.0"
     const val navigation = "2.5.1"
     const val firebaseBom = "30.3.2"

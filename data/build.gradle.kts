@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -32,10 +32,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
     implementation(fileTree(mapOf("dir" to "Versions", "include" to listOf("*.jar"))))
     implementation(project(":domain"))
@@ -61,7 +57,7 @@ dependencies {
     implementation(Libs.okhttp)
 
     implementation(Libs.moshi)
-    kapt(Libs.moshiCodegen)
+    ksp(Libs.moshiCodegen)
 
     testImplementation(Libs.Test.junit)
     androidTestImplementation(Libs.Test.junit)

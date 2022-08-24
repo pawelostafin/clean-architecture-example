@@ -6,6 +6,7 @@ plugins {
     id("com.github.ben-manes.versions") version Versions.benManesVersions apply true
     id("com.google.gms.google-services") version Versions.googleServices apply false
     id("com.google.firebase.crashlytics") version Versions.firebaseCrashlyticsGradle apply false
+    id("com.google.devtools.ksp") version Versions.ksp apply false
 }
 
 tasks.register("clean", Delete::class) {
