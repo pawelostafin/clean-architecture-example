@@ -41,6 +41,7 @@ object Libs {
         const val mockk = "io.mockk:mockk:" + Versions.mockk
         const val mockkAgentJvm = "io.mockk:mockk-agent-jvm:" + Versions.mockk
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:" + Versions.coroutinesTest
+        const val turbine = "app.cash.turbine:turbine:" + Versions.turbine
         const val junit = "junit:junit:" + Versions.junit
         const val composeUiTestJunit4 = "androidx.compose.ui:ui-test-junit4:" + Versions.compose
         const val koinTest = "io.insert-koin:koin-test:" + Versions.koin

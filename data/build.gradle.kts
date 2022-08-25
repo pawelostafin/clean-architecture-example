@@ -50,6 +50,7 @@ dependencies {
     testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Test.mockkAgentJvm)
     testImplementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.turbine)
 
     implementation(Libs.retrofit)
     implementation(Libs.retrofitConverterMoshi)

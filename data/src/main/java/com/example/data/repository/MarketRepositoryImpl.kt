@@ -5,10 +5,10 @@ import com.example.data.network.service.MarketService
 import com.example.domain.model.CurrencyCode
 import com.example.domain.model.Market
 import com.example.domain.model.MarketChartPrice
+import com.example.domain.provider.DispatchersProvider
 import com.example.domain.repository.MarketRepository
 import com.example.domain.util.ReusableCoroutineScope
 import com.example.domain.util.supportLaunch
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,8 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MarketRepositoryImpl(
-    private val marketService: MarketService
+    private val marketService: MarketService,
+    private val dispatchersProvider: DispatchersProvider
 ) : MarketRepository {
 
     @Volatile
@@ -39,7 +40,7 @@ class MarketRepositoryImpl(
         currencyId: String,
         baseCurrency: CurrencyCode
     ): List<MarketChartPrice> {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatchersProvider.IO) {
             val response = marketService.getMarketChartData(
                 id = currencyId,
                 vsCurrency = baseCurrency.rawValue

@@ -60,7 +60,8 @@ val useCaseModule = module {
 
     factory {
         GetMarketChartDataUseCase(
-            marketRepository = get()
+            marketRepository = get(),
+            dispatchersProvider = get()
         )
     }
 

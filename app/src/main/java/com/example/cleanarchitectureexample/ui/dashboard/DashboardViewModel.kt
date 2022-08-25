@@ -6,11 +6,12 @@ import com.example.cleanarchitectureexample.ui.base.asFlow
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.cleanarchitectureexample.ui.base.viewModelObserveFlow
 import com.example.domain.model.CurrencyCode
+import com.example.domain.provider.DispatchersProvider
 import com.example.domain.usecase.GetUserDetailsUseCase
 import com.example.domain.usecase.ObserveBaseCurrencyUseCase
 import com.example.domain.usecase.ObserveMarketsUseCase
 import com.example.domain.usecase.SetBaseCurrencyUseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -21,7 +22,8 @@ class DashboardViewModel(
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
     private val observeMarketsUseCase: ObserveMarketsUseCase,
     private val observeBaseCurrencyUseCase: ObserveBaseCurrencyUseCase,
-    private val setBaseCurrencyUseCase: SetBaseCurrencyUseCase
+    private val setBaseCurrencyUseCase: SetBaseCurrencyUseCase,
+    private val dispatchersProvider: DispatchersProvider
 ) : BaseViewModel() {
 
     private val _navigation = EventChannel<Navigation>()
@@ -71,6 +73,7 @@ class DashboardViewModel(
             ?: initialValue
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeMarkets() {
         viewModelObserveFlow(
             onProgressChanged = { _progressViewVisibility.value = it },
@@ -81,7 +84,7 @@ class DashboardViewModel(
                     }
             },
         ) { markets ->
-            val items = withContext(Dispatchers.IO) {
+            val items = withContext(dispatchersProvider.IO) {
                 markets?.map {
                     MarketItem(
                         id = it.id,

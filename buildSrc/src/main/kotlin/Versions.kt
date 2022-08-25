@@ -19,6 +19,7 @@ object Versions {
     const val preference = "1.2.0"
     const val timber = "5.0.1"
     const val coroutinesTest = "1.6.4"
+    const val turbine = "0.8.0"
     const val mockk = "1.12.5"
     const val workRuntime = "2.7.0"
     const val junit = "4.13.2"

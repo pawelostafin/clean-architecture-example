@@ -47,6 +47,7 @@ dependencies {
     testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Test.mockkAgentJvm)
     testImplementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.turbine)
 
     testImplementation(Libs.Test.junit)
     androidTestImplementation(Libs.Test.junit)

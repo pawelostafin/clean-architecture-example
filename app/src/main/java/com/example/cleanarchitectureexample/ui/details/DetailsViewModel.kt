@@ -29,7 +29,9 @@ class DetailsViewModel(
     private val _chartData = MutableStateFlow<ChartData?>(null)
     val chartData = _chartData.asStateFlow()
 
-    init {
+    override fun initialize() {
+        super.initialize()
+
         getMarketInfo()
         getMarketChartData()
     }

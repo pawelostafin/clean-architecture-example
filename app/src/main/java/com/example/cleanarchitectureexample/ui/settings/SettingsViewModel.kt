@@ -28,15 +28,13 @@ class SettingsViewModel(
         _navigation.trySend(Navigation.Back)
     }
 
-    init {
+    override fun initialize() {
+        super.initialize()
+
         viewModelObserveFlow(
             flowProvider = { observeDarkThemeModeUseCase.execute() },
             onEach = { _darkThemeMode.value = it }
         )
-    }
-
-    private fun getInitialDarkThemeMode(): DarkThemeMode {
-        return observeDarkThemeModeUseCase.execute().value
     }
 
     fun darkThemeModeChangeRequested(newValue: DarkThemeMode) {
@@ -50,6 +48,10 @@ class SettingsViewModel(
 
     fun darkThemeItemClicked() {
         _darkThemeModeDropdownVisibility.value = true
+    }
+
+    private fun getInitialDarkThemeMode(): DarkThemeMode {
+        return observeDarkThemeModeUseCase.execute().value
     }
 
     sealed class Navigation {

@@ -32,7 +32,8 @@ val viewModelModule = module {
             getUserDetailsUseCase = get(),
             observeMarketsUseCase = get(),
             observeBaseCurrencyUseCase = get(),
-            setBaseCurrencyUseCase = get()
+            setBaseCurrencyUseCase = get(),
+            dispatchersProvider = get()
         )
     }
 

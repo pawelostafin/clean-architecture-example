@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,10 +33,10 @@ fun CustomButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    val scale = remember { mutableStateOf(1f) }
-    val animatedScale = animateFloatAsState(
+    var scale by remember { mutableStateOf(1f) }
+    val animatedScale by animateFloatAsState(
         animationSpec = spring(),
-        targetValue = scale.value
+        targetValue = scale
     )
     val backgroundShape = remember { RoundedCornerShape(12.dp) }
     val alpha = if (enabled) 1f else 0.2f
@@ -42,15 +44,15 @@ fun CustomButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .scale(animatedScale.value)
+            .scale(animatedScale)
             .clip(backgroundShape)
             .alpha(alpha)
             .background(color = AppTheme.colors.primary)
             .gestureRecognizer(
                 enabled = enabled,
                 onClick = { onClick.invoke() },
-                onPressStart = { scale.value = 0.93f },
-                onPressEnd = { scale.value = 1f },
+                onPressStart = { scale = 0.93f },
+                onPressEnd = { scale = 1f },
             )
     ) {
         Text(

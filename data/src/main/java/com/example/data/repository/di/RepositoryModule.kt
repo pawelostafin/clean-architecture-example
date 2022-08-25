@@ -37,7 +37,8 @@ val repositoryModule = module {
 
     single<MarketRepository> {
         MarketRepositoryImpl(
-            marketService = get()
+            marketService = get(),
+            dispatchersProvider = get()
         )
     }
 

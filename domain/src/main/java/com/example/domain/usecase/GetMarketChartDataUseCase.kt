@@ -4,17 +4,18 @@ import com.example.domain.model.ChartData
 import com.example.domain.model.ChartDataTrend
 import com.example.domain.model.ChartPoint
 import com.example.domain.model.CurrencyCode
+import com.example.domain.provider.DispatchersProvider
 import com.example.domain.repository.MarketRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class GetMarketChartDataUseCase(
-    private val marketRepository: MarketRepository
+    private val marketRepository: MarketRepository,
+    private val dispatchersProvider: DispatchersProvider
 ) {
 
     suspend fun execute(currencyId: String): ChartData {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatchersProvider.IO) {
             val pricesInTime = marketRepository.getMarketChartData(
                 currencyId = currencyId,
                 baseCurrency = CurrencyCode.Pln
