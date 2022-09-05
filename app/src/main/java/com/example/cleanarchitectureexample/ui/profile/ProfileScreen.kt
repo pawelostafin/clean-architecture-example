@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,10 +13,14 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -194,4 +199,40 @@ fun ProfileListButton(
         }
     }
 
+}
+
+@Composable
+fun CustomModalDrawer(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onOpenRequest: () -> Unit,
+    isExpanded: Boolean,
+    drawerContent: @Composable (ColumnScope) -> Unit,
+    content: @Composable () -> Unit
+) {
+
+    val drawerState = rememberDrawerState(
+        initialValue = DrawerValue.Closed,
+        confirmStateChange = {
+            when (it) {
+                DrawerValue.Closed -> onDismissRequest.invoke()
+                DrawerValue.Open -> onOpenRequest.invoke()
+            }
+            false
+        }
+    )
+
+    LaunchedEffect(key1 = isExpanded) {
+        if (isExpanded) {
+            drawerState.open()
+        } else {
+            drawerState.close()
+        }
+    }
+
+    ModalDrawer(
+        drawerContent = drawerContent,
+        drawerState = drawerState,
+        content = content
+    )
 }
