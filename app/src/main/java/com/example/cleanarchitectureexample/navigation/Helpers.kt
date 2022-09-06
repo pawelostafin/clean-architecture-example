@@ -1,13 +1,14 @@
 package com.example.cleanarchitectureexample.navigation
 
-import androidx.fragment.app.Fragment
+import androidx.activity.ComponentActivity
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.example.cleanarchitectureexample.R
+import timber.log.Timber
 
 
-fun Fragment.navigate(
+fun NavHostController.supportNavigate(
     route: String,
     popUpToRoute: String? = null,
     inclusive: Boolean = false,
@@ -28,12 +29,22 @@ fun Fragment.navigate(
             )
         }
     }
-    findNavController().navigate(
+    navigate(
         route = route,
         navOptions = navOptions
     )
 }
 
+fun NavHostController.navigateBackOrClose() {
+    Timber.d("ELOELO clicked!")
+    val poppedBackStack = popBackStack()
+    if (!poppedBackStack) {
+        (context as? ComponentActivity)?.finish()
+    }
+    Timber.d("ELOELO $poppedBackStack")
+}
+
+//TODO currently not working waits for compose navigation animations
 private fun NavOptionsBuilder.applyTransitionRight() =
     anim {
         enter = R.anim.slide_in_right
@@ -42,6 +53,7 @@ private fun NavOptionsBuilder.applyTransitionRight() =
         popExit = R.anim.slide_out_right
     }
 
+//TODO currently not working waits for compose navigation animations
 private fun NavOptionsBuilder.applyTransitionBottom() =
     anim {
         enter = R.anim.slide_in_bottom
@@ -50,6 +62,7 @@ private fun NavOptionsBuilder.applyTransitionBottom() =
         popExit = R.anim.slide_out_bottom
     }
 
+//TODO currently not working waits for compose navigation animations
 private fun NavOptionsBuilder.applyTransitionFade() =
     anim {
         enter = R.anim.fade_in

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.example.cleanarchitectureexample.ui.base.BaseScreen
 import com.example.cleanarchitectureexample.ui.dashboard.CurrencyImage
 import com.example.cleanarchitectureexample.ui.dashboard.toStringValue
 import com.example.cleanarchitectureexample.ui.settings.BackButton
@@ -54,7 +55,13 @@ import com.example.domain.model.ChartPoint
 import java.math.BigDecimal
 
 @Composable
-fun DetailsScreen(viewModel: DetailsViewModel) {
+fun DetailsScreen(
+    viewModel: DetailsViewModel,
+    navigate: (DetailsViewModel.Navigation) -> Unit
+) = BaseScreen(
+    viewModel = viewModel,
+    navigate = navigate
+) {
     val marketInfo by viewModel.marketInfo.collectAsState()
     val chartData by viewModel.chartData.collectAsState()
 

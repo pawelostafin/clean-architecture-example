@@ -1,8 +1,6 @@
 package com.example.cleanarchitectureexample.ui.profile
 
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.domain.usecase.GetUserDetailsUseCase
 import com.example.domain.usecase.LogoutUseCase
@@ -12,17 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 class ProfileViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val getUserDetailsUseCase: GetUserDetailsUseCase
-) : BaseViewModel() {
+) : ComposeBaseViewModel<ProfileViewModel.Navigation>() {
 
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
 
     private val _profileInfo = MutableStateFlow<ProfileInfo?>(null)
     val profileInfo = _profileInfo.asStateFlow()
 
-    override fun initialize() {
-        super.initialize()
-
+    init {
         viewModelLaunch {
             val userDetails = getUserDetailsUseCase.execute()
             _profileInfo.value = ProfileInfo(
@@ -32,10 +26,6 @@ class ProfileViewModel(
                 firstLetterOfTheFirstName = userDetails.firstLetterOfFirstName
             )
         }
-    }
-
-    fun backButtonClicked() {
-        _navigation.trySend(Navigation.Back)
     }
 
     fun logoutButtonClicked() {
@@ -57,6 +47,10 @@ class ProfileViewModel(
         object Back : Navigation()
         object Login : Navigation()
         object Settings : Navigation()
+    }
+
+    override fun systemBackButtonClicked() {
+        _navigation.trySend(Navigation.Back)
     }
 
 }

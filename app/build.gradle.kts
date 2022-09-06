@@ -103,8 +103,10 @@ dependencies {
 
     implementation(Libs.navigationFragmentKtx)
     implementation(Libs.navigationUiKtx)
+    implementation(Libs.navigationCompose)
 
     implementation(Libs.koin)
+    implementation(Libs.koinCompose)
 
     testImplementation(Libs.Test.koinTest)
     testImplementation(Libs.Test.koinTestJunit4)

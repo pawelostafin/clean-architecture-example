@@ -1,8 +1,6 @@
 package com.example.cleanarchitectureexample.ui.settings
 
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelObserveFlow
 import com.example.domain.model.DarkThemeMode
 import com.example.domain.usecase.ObserveDarkThemeModeUseCase
@@ -13,10 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class SettingsViewModel(
     private val observeDarkThemeModeUseCase: ObserveDarkThemeModeUseCase,
     private val setDarkThemeModeUseCase: SetDarkThemeModeUseCase
-) : BaseViewModel() {
-
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
+) : ComposeBaseViewModel<SettingsViewModel.Navigation>() {
 
     private val _darkThemeMode = MutableStateFlow(getInitialDarkThemeMode())
     val darkThemeMode = _darkThemeMode.asStateFlow()
@@ -24,16 +19,12 @@ class SettingsViewModel(
     private val _darkThemeModeDropdownVisibility = MutableStateFlow(false)
     val darkThemeModeDropdownVisibility = _darkThemeModeDropdownVisibility.asStateFlow()
 
-    fun backButtonClicked() {
-        _navigation.trySend(Navigation.Back)
-    }
-
-    override fun initialize() {
-        super.initialize()
-
+    init {
         viewModelObserveFlow(
-            flowProvider = { observeDarkThemeModeUseCase.execute() },
-            onEach = { _darkThemeMode.value = it }
+            flowProvider =
+            { observeDarkThemeModeUseCase.execute() },
+            onEach =
+            { _darkThemeMode.value = it }
         )
     }
 
@@ -54,8 +45,17 @@ class SettingsViewModel(
         return observeDarkThemeModeUseCase.execute().value
     }
 
+    fun backButtonClicked() {
+        _navigation.trySend(Navigation.Back)
+    }
+
+    override fun systemBackButtonClicked() {
+        _navigation.trySend(Navigation.Back)
+    }
+
     sealed class Navigation {
         object Back : Navigation()
     }
+
 
 }

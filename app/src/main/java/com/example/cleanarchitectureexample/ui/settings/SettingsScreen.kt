@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,12 +38,19 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.base.BaseScreen
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.domain.model.DarkThemeMode
 
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel) {
+fun SettingsScreen(
+    viewModel: SettingsViewModel,
+    navigate: (SettingsViewModel.Navigation) -> Unit
+) = BaseScreen(
+    viewModel = viewModel,
+    navigate = navigate
+) {
     val darkThemeMode by viewModel.darkThemeMode.collectAsState()
     val darkThemeModeDropdownVisibility by viewModel.darkThemeModeDropdownVisibility.collectAsState()
 
@@ -55,7 +64,9 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
     }
 
     ConstraintLayout(
-        modifier = Modifier.background(AppTheme.colors.backgroundPrimary),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.backgroundPrimary),
         constraintSet = constraints
     ) {
         BackButton(

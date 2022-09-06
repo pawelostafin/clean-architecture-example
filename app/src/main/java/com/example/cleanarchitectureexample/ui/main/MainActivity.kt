@@ -1,87 +1,62 @@
 package com.example.cleanarchitectureexample.ui.main
 
-import androidx.navigation.createGraph
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.fragment
-import com.example.cleanarchitectureexample.databinding.ActivityMainBinding
-import com.example.cleanarchitectureexample.ui.base.BaseActivity
-import com.example.cleanarchitectureexample.ui.dashboard.DashboardFragment
-import com.example.cleanarchitectureexample.ui.details.DetailsFragment
-import com.example.cleanarchitectureexample.ui.login.LoginFragment
-import com.example.cleanarchitectureexample.ui.profile.ProfileFragment
-import com.example.cleanarchitectureexample.ui.settings.SettingsFragment
-import com.example.cleanarchitectureexample.ui.splash.SplashFragment
-import com.example.cleanarchitectureexample.ui.test.TestFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.ui.Modifier
+import com.example.cleanarchitectureexample.navigation.NavRoute
+import com.example.cleanarchitectureexample.ui.theme.AppTheme
 
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(ActivityMainBinding::inflate) {
+class MainActivity : ComponentActivity() {
 
-    override val viewModel: MainViewModel by viewModel()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun initView() {
-        super.initView()
-
-        initNavigation()
-    }
-
-    override fun initObservers() {
-        super.initObservers()
-    }
-
-    private fun initNavigation() {
-        val navHostFragment = (binding.navHostContainer.getFragment() as NavHostFragment)
-        val navController = navHostFragment.navController
-
-        navController.apply {
-            graph = createGraph(
-                startDestination = MainGraphRoutes.Splash.graphRoute,
-                route = MainGraphRoutes.Root.graphRoute
-            ) {
-                fragment<SplashFragment>(route = MainGraphRoutes.Splash.graphRoute)
-                fragment<DashboardFragment>(route = MainGraphRoutes.Dashboard.graphRoute)
-                fragment<LoginFragment>(route = MainGraphRoutes.Login.graphRoute)
-                fragment<SettingsFragment>(route = MainGraphRoutes.Settings.graphRoute)
-                fragment<DetailsFragment>(route = MainGraphRoutes.Details.graphRoute)
-                fragment<TestFragment>(route = MainGraphRoutes.Test.graphRoute)
-                fragment<ProfileFragment>(route = MainGraphRoutes.Profile.graphRoute)
+        setContent {
+            MaterialTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = AppTheme.colors.backgroundPrimary
+                ) {
+                    MainNavigationHandler()
+                }
             }
         }
     }
 
 }
 
-interface NavRoute {
-    val graphRoute: String
-    val navigationRoute: String
-}
-
-sealed class MainGraphRoutes : NavRoute {
-    object Root : MainGraphRoutes() {
-        override val graphRoute: String = "main_graph"
+sealed class MainRoutes : NavRoute {
+    object Root : MainRoutes() {
+        override val graphRoute: String = "main_root"
         override val navigationRoute: String = graphRoute
     }
 
-    object Splash : MainGraphRoutes() {
+    object Splash : MainRoutes() {
         override val graphRoute: String = "splash"
         override val navigationRoute: String = graphRoute
     }
 
-    object Login : MainGraphRoutes() {
+    object Login : MainRoutes() {
         override val graphRoute: String = "login"
         override val navigationRoute: String = graphRoute
     }
 
-    object Dashboard : MainGraphRoutes() {
+    object Dashboard : MainRoutes() {
         override val graphRoute: String = "dashboard"
         override val navigationRoute: String = graphRoute
     }
 
-    object Settings : MainGraphRoutes() {
+    object Settings : MainRoutes() {
         override val graphRoute: String = "settings"
         override val navigationRoute: String = graphRoute
     }
 
-    object Details : MainGraphRoutes() {
+    object Details : MainRoutes() {
         const val CURRENCY_ID = "currencyId"
         private const val base = "details/"
         override val graphRoute: String = "$base{$CURRENCY_ID}"
@@ -92,13 +67,9 @@ sealed class MainGraphRoutes : NavRoute {
         }
     }
 
-    object Test : MainGraphRoutes() {
-        override val graphRoute: String = "test"
-        override val navigationRoute: String = graphRoute
-    }
-
-    object Profile : MainGraphRoutes() {
+    object Profile : MainRoutes() {
         override val graphRoute: String = "profile"
         override val navigationRoute: String = graphRoute
     }
 }
+

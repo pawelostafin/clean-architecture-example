@@ -1,21 +1,14 @@
 package com.example.cleanarchitectureexample.ui.splash
 
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.domain.usecase.IsUserLoggedInUseCase
 
 class SplashViewModel(
     private val isUserLoggedInUseCase: IsUserLoggedInUseCase
-) : BaseViewModel() {
+) : ComposeBaseViewModel<SplashViewModel.Navigation>() {
 
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
-
-    override fun initialize() {
-        super.initialize()
-
+    init {
         viewModelLaunch {
             val isUserLoggedIn = isUserLoggedInUseCase.execute()
             val destination = if (isUserLoggedIn) {
@@ -27,12 +20,11 @@ class SplashViewModel(
         }
     }
 
-    fun backButtonClicked() {
-        _navigation.trySend(Navigation.Back)
+    override fun systemBackButtonClicked() {
+        // do nothing
     }
 
     sealed class Navigation {
-        object Back : Navigation()
         object Login : Navigation()
         object Dashboard : Navigation()
     }

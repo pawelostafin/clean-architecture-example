@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.base.BaseScreen
 import com.example.cleanarchitectureexample.ui.model.ButtonState
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.button.CustomButton
@@ -35,19 +37,23 @@ import com.example.cleanarchitectureexample.ui.utli.textfield.CustomTextField
 import com.example.cleanarchitectureexample.ui.utli.textfield.CustomTextFieldType
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    navigate: (LoginViewModel.Navigation) -> Unit
+) = BaseScreen(
+    viewModel = viewModel,
+    navigate = navigate
+) {
     val login by viewModel.loginState.collectAsState()
     val password by viewModel.passwordState.collectAsState()
 
     Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.backgroundPrimary)
+            .padding(start = 48.dp, end = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .background(AppTheme.colors.backgroundPrimary)
-            .padding(
-                start = 48.dp,
-                end = 48.dp
-            )
     ) {
         CustomTextField(
             state = login,

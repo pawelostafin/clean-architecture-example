@@ -1,8 +1,6 @@
 package com.example.cleanarchitectureexample.ui.dashboard
 
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.cleanarchitectureexample.ui.base.viewModelObserveFlow
 import com.example.domain.model.CurrencyCode
@@ -24,10 +22,7 @@ class DashboardViewModel(
     private val observeBaseCurrencyUseCase: ObserveBaseCurrencyUseCase,
     private val setBaseCurrencyUseCase: SetBaseCurrencyUseCase,
     private val dispatchersProvider: DispatchersProvider
-) : BaseViewModel() {
-
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
+) : ComposeBaseViewModel<DashboardViewModel.Navigation>() {
 
     private val _profileButtonState = MutableStateFlow<ProfileButtonState>(ProfileButtonState.InProgress)
     val profileButtonState = _profileButtonState.asStateFlow()
@@ -41,9 +36,7 @@ class DashboardViewModel(
     private val _baseCurrencySelectorState = MutableStateFlow<BaseCurrencySelectorState?>(null)
     val baseCurrencySelectorState = _baseCurrencySelectorState.asStateFlow()
 
-    override fun initialize() {
-        super.initialize()
-
+    init {
         getUserDetails()
         observeMarkets()
         observeBaseCurrency()
@@ -117,10 +110,6 @@ class DashboardViewModel(
         }
     }
 
-    fun backButtonClicked() {
-        _navigation.trySend(Navigation.Back)
-    }
-
     fun profileButtonClicked() {
         _navigation.trySend(Navigation.Profile)
     }
@@ -157,6 +146,10 @@ class DashboardViewModel(
         object Back : Navigation()
         object Profile : Navigation()
         data class Details(val currencyId: String) : Navigation()
+    }
+
+    override fun systemBackButtonClicked() {
+        _navigation.trySend(Navigation.Back)
     }
 
 }

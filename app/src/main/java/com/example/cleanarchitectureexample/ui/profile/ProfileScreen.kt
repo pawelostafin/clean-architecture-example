@@ -39,15 +39,23 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import com.example.cleanarchitectureexample.R
+import com.example.cleanarchitectureexample.ui.base.BaseScreen
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
 import com.example.cleanarchitectureexample.ui.utli.withAlpha
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel,
+    navigate: (ProfileViewModel.Navigation) -> Unit
+) = BaseScreen(
+    viewModel = viewModel,
+    navigate = navigate
+) {
     val profileInfo by viewModel.profileInfo.collectAsState()
     ConstraintLayout(
         modifier = Modifier
+            .fillMaxSize()
             .background(color = AppTheme.colors.backgroundPrimary)
     ) {
         val (profileImage, buttonsLayout, closeButton, fullNameTextView) = createRefs()

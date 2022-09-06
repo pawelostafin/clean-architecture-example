@@ -1,5 +1,6 @@
 package com.example.cleanarchitectureexample.ui.base
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CancellationException
@@ -23,7 +24,7 @@ fun <T> EventChannel() = Channel<T>(Channel.CONFLATED)
 
 fun <T> Channel<T>.asFlow() = receiveAsFlow()
 
-fun <T> BaseViewModel.viewModelObserveFlow(
+fun <T> ViewModel.viewModelObserveFlow(
     flowProvider: suspend () -> Flow<T>,
     onProgressChanged: (Boolean) -> Unit = {},
     onError: suspend (Throwable) -> Unit = {},
@@ -40,7 +41,7 @@ fun <T> BaseViewModel.viewModelObserveFlow(
     )
 }
 
-fun BaseViewModel.viewModelLaunch(
+fun ViewModel.viewModelLaunch(
     onProgressChanged: suspend (isInProgress: Boolean) -> Unit = {},
     onError: suspend (throwable: Throwable) -> Unit = {},
     onCancel: suspend (CancellationException) -> Unit = {},

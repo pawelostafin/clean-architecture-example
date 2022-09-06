@@ -1,9 +1,7 @@
 package com.example.cleanarchitectureexample.ui.login
 
 import com.example.cleanarchitectureexample.BuildConfig
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.cleanarchitectureexample.ui.model.FieldState
 import com.example.domain.usecase.LoginUseCase
@@ -12,10 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase
-) : BaseViewModel() {
-
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
+) : ComposeBaseViewModel<LoginViewModel.Navigation>() {
 
     private val _loginFieldState = MutableStateFlow(getInitialLogin())
     val loginState = _loginFieldState.asStateFlow()
@@ -23,16 +18,16 @@ class LoginViewModel(
     private val _passwordFieldState = MutableStateFlow(getInitialPassword())
     val passwordState = _passwordFieldState.asStateFlow()
 
+    override fun systemBackButtonClicked() {
+        _navigation.trySend(Navigation.Back)
+    }
+
     fun loginChangeRequested(newValue: String) {
         _loginFieldState.value = _loginFieldState.value.copy(text = newValue)
     }
 
     fun passwordChangeRequested(newValue: String) {
         _passwordFieldState.value = _passwordFieldState.value.copy(text = newValue)
-    }
-
-    fun backButtonClicked() {
-        _navigation.trySend(Navigation.Back)
     }
 
     fun loginButtonClicked() {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import com.example.cleanarchitectureexample.ui.base.BaseScreen
 import com.example.cleanarchitectureexample.ui.settings.CustomDropdownMenu
 import com.example.cleanarchitectureexample.ui.theme.AppTheme
 import com.example.cleanarchitectureexample.ui.utli.clickableWithRipple
@@ -44,7 +46,13 @@ import com.example.cleanarchitectureexample.ui.utli.withAlpha
 import com.example.domain.model.CurrencyCode
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel) {
+fun DashboardScreen(
+    viewModel: DashboardViewModel,
+    navigate: (DashboardViewModel.Navigation) -> Unit
+) = BaseScreen(
+    viewModel = viewModel,
+    navigate = navigate
+) {
     val profileButtonState by viewModel.profileButtonState.collectAsState()
     val items by viewModel.items.collectAsState()
     val progressViewVisibility by viewModel.progressViewVisibility.collectAsState()
@@ -66,6 +74,7 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
     ConstraintLayout(
         constraintSet = constraints,
         modifier = Modifier
+            .fillMaxSize()
             .background(color = AppTheme.colors.backgroundPrimary)
     ) {
         if (progressViewVisibility) {

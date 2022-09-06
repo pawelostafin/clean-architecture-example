@@ -33,9 +33,11 @@ object Libs {
     const val timber = "com.jakewharton.timber:timber:" + Versions.timber
 
     const val koin = "io.insert-koin:koin-android:" + Versions.koin
+    const val koinCompose = "io.insert-koin:koin-androidx-compose:" + Versions.koin
 
     const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:" + Versions.navigation
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:" + Versions.navigation
+    const val navigationCompose = "androidx.navigation:navigation-compose:" + Versions.navigation
 
     object Test {
         const val mockk = "io.mockk:mockk:" + Versions.mockk

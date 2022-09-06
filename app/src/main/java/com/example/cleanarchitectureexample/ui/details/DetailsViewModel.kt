@@ -1,8 +1,6 @@
 package com.example.cleanarchitectureexample.ui.details
 
-import com.example.cleanarchitectureexample.ui.base.BaseViewModel
-import com.example.cleanarchitectureexample.ui.base.EventChannel
-import com.example.cleanarchitectureexample.ui.base.asFlow
+import com.example.cleanarchitectureexample.ui.base.ComposeBaseViewModel
 import com.example.cleanarchitectureexample.ui.base.viewModelLaunch
 import com.example.domain.model.ChartData
 import com.example.domain.model.CurrencyCode
@@ -18,10 +16,7 @@ class DetailsViewModel(
     private val getMarketChartDataUseCase: GetMarketChartDataUseCase,
     private val getMarketUseCase: GetMarketUseCase,
     private val getBaseCurrencyCodeUseCase: GetBaseCurrencyCodeUseCase
-) : BaseViewModel() {
-
-    private val _navigation = EventChannel<Navigation>()
-    val navigation = _navigation.asFlow()
+) : ComposeBaseViewModel<DetailsViewModel.Navigation>() {
 
     private val _marketInfo = MutableStateFlow<MarketInfo?>(null)
     val marketInfo = _marketInfo.asStateFlow()
@@ -29,9 +24,7 @@ class DetailsViewModel(
     private val _chartData = MutableStateFlow<ChartData?>(null)
     val chartData = _chartData.asStateFlow()
 
-    override fun initialize() {
-        super.initialize()
-
+    init {
         getMarketInfo()
         getMarketChartData()
     }
@@ -68,6 +61,10 @@ class DetailsViewModel(
 
     sealed class Navigation {
         object Back : Navigation()
+    }
+
+    override fun systemBackButtonClicked() {
+        _navigation.trySend(Navigation.Back)
     }
 
 }
